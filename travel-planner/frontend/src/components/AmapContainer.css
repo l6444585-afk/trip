@@ -1,0 +1,285 @@
+/**
+ * 高德地图容器组件样式
+ * 支持响应式布局和交互优化
+ */
+
+.amap-container-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.amap-map-container {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+.amap-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.amap-controls-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.amap-controls-overlay .ant-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.amap-controls-overlay .ant-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+}
+
+.amap-route-info-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  max-width: 280px;
+}
+
+.route-info-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(24, 144, 255, 0.2);
+}
+
+.route-info-header {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1890ff;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.route-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-info-item .label {
+  color: #666;
+  font-size: 14px;
+}
+
+.route-info-item .value {
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.amap-children-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 150;
+}
+
+.amap-children-overlay > * {
+  pointer-events: auto;
+}
+
+.amap-marker-custom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.amap-marker-label {
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.amap-marker-label:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.5);
+}
+
+.amap-marker-number {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(82, 196, 26, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.amap-marker-number:hover {
+  transform: scale(1.1);
+}
+
+.amap-info-window {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.amap-info-window-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.amap-info-window-content {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.amap-info-window-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .amap-controls-overlay {
+    top: 12px;
+    right: 12px;
+    padding: 6px;
+  }
+
+  .amap-controls-overlay .ant-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .amap-route-info-overlay {
+    top: 12px;
+    left: 12px;
+    max-width: 220px;
+  }
+
+  .route-info-card {
+    padding: 12px;
+  }
+
+  .route-info-header {
+    font-size: 14px;
+  }
+
+  .route-info-item .label,
+  .route-info-item .value {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .amap-route-info-overlay {
+    max-width: calc(100% - 24px);
+  }
+
+  .route-info-card {
+    padding: 10px;
+  }
+}
+
+@keyframes markerBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.amap-marker-bounce {
+  animation: markerBounce 0.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(24, 144, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(24, 144, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(24, 144, 255, 0);
+  }
+}
+
+.amap-marker-pulse {
+  animation: pulse 2s infinite;
+}
+
+.amap-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  border-radius: 0 !important;
+}
+
+.amap-fullscreen .amap-map-container {
+  border-radius: 0;
+}

@@ -1,0 +1,7 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
+    "ANTHROPIC_API_KEY": "0ae5056ccc2a4e7aae43404f3c1627e5.HYRZ1pbtd14FrEkO"
+  },
+  "model": "glm-4.7"
+}

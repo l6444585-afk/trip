@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "$2b$12$iVNyM7mP830jHhu/52KGmuNeWH70loLU.9QObPNN4jRH/Guv1WPsu",
+      "created_at": "2026-02-07 12:17:31.639067"
+    }
+  ],
+  "attractions": [],
+  "itineraries": [],
+  "schedules": []
+}

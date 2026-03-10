@@ -1,0 +1,29 @@
+
+数据迁移报告
+================
+迁移时间: 2026-02-07 22:21:40
+源目录: d:\Trae\01_Project_Java\travel-planner
+备份目录: d:\Trae\01_Project_Java\travel-planner\backup\backup_20260207_222140
+
+备份内容:
+1. 数据库文件 (SQLite)
+2. 数据库 SQL 导出
+3. 数据库 JSON 导出
+4. 环境变量文件
+5. 配置文件
+
+数据表:
+- users: 用户信息
+- itineraries: 行程信息
+- schedules: 行程安排
+- attractions: 景点信息
+
+验证步骤:
+1. 检查备份文件完整性
+2. 验证数据库可连接
+3. 确认数据记录数
+4. 测试应用启动
+
+恢复方法:
+1. 数据库恢复: 将 backup/travel_planner.db 复制到 backend/
+2. 环境变量: 将 backup/.env 文件复制到对应位置
