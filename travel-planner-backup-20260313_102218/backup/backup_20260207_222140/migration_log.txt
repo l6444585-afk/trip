@@ -1,0 +1,23 @@
+[2026-02-07 22:21:40] 备份目录创建: d:\Trae\01_Project_Java\travel-planner\backup\backup_20260207_222140
+[2026-02-07 22:21:40] 开始数据备份...
+[2026-02-07 22:21:40] 数据库备份成功: d:\Trae\01_Project_Java\travel-planner\backup\backup_20260207_222140\travel_planner.db
+[2026-02-07 22:21:40] 数据库 SQL 导出成功: d:\Trae\01_Project_Java\travel-planner\backup\backup_20260207_222140\travel_planner.sql
+[2026-02-07 22:21:40] 导出表 users: 1 条记录
+[2026-02-07 22:21:40] 导出表 attractions: 0 条记录
+[2026-02-07 22:21:40] 导出表 itineraries: 0 条记录
+[2026-02-07 22:21:40] 导出表 schedules: 0 条记录
+[2026-02-07 22:21:40] 数据库 JSON 导出成功: d:\Trae\01_Project_Java\travel-planner\backup\backup_20260207_222140\travel_planner_data.json
+[2026-02-07 22:21:40] 环境变量文件备份完成: .env, .env.template, .env.example, .env, .env
+[2026-02-07 22:21:40] 配置文件备份完成: requirements.txt, package.json, package-lock.json
+[2026-02-07 22:21:40] 迁移报告已创建: d:\Trae\01_Project_Java\travel-planner\backup\backup_20260207_222140\migration_report.txt
+[2026-02-07 22:21:40] 开始验证备份...
+[2026-02-07 22:21:40]   ✓ travel_planner.db (49152 bytes)
+[2026-02-07 22:21:40]   ✓ travel_planner.sql (1798 bytes)
+[2026-02-07 22:21:40]   ✓ travel_planner_data.json (315 bytes)
+[2026-02-07 22:21:40]   ✓ 数据库可连接，共 4 个表
+[2026-02-07 22:21:40]     - users: 1 条记录
+[2026-02-07 22:21:40]     - attractions: 0 条记录
+[2026-02-07 22:21:40]     - itineraries: 0 条记录
+[2026-02-07 22:21:40]     - schedules: 0 条记录
+[2026-02-07 22:21:40] 备份验证完成
+[2026-02-07 22:21:40] ✓ 数据备份和验证成功完成

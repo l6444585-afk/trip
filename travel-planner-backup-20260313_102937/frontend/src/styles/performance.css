@@ -1,0 +1,858 @@
+/* 性能优化 */
+
+/* 关键CSS内联优化 */
+.critical-css {
+  display: block;
+}
+
+/* 字体加载优化 */
+@font-face {
+  font-family: 'PingFang SC';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PingFang SC';
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PingFang SC';
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PingFang SC';
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* 图片懒加载 */
+img {
+  loading: lazy;
+  decoding: async;
+}
+
+/* 图片优化 */
+.img-optimized {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 0;
+}
+
+/* 视频优化 */
+video {
+  loading: lazy;
+  preload: metadata;
+}
+
+/* iframe懒加载 */
+iframe {
+  loading: lazy;
+}
+
+/* 内容可见性优化 */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 0;
+}
+
+.content-visibility-hidden {
+  content-visibility: hidden;
+  contain-intrinsic-size: 0 0;
+}
+
+/* GPU加速 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.gpu-accelerated-opacity {
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+/* 避免布局抖动 */
+.layout-stable {
+  contain: layout;
+}
+
+/* 避免重绘 */
+.paint-stable {
+  contain: paint;
+}
+
+/* 避免样式重计算 */
+.style-stable {
+  contain: style;
+}
+
+/* 复合层优化 */
+.composite-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 滚动性能优化 */
+.scroll-smooth {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-performance {
+  overflow-anchor: none;
+  overscroll-behavior: contain;
+}
+
+/* 动画性能优化 */
+.animation-performance {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* 避免昂贵的属性 */
+.performance-friendly {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  filter: none;
+}
+
+/* 文本渲染优化 */
+.text-rendering-optimized {
+  text-rendering: optimizeSpeed;
+  -webkit-text-rendering: optimizeSpeed;
+  -moz-text-rendering: optimizeSpeed;
+  -ms-text-rendering: optimizeSpeed;
+}
+
+/* 字体平滑 */
+.font-smoothing-optimized {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 避免子像素渲染 */
+.subpixel-optimized {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* CSS containment优化 */
+.contain-strict {
+  contain: strict;
+}
+
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-size {
+  contain: size;
+}
+
+.contain-style {
+  contain: style;
+}
+
+/* will-change优化 */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+/* 避免同步布局 */
+.layout-async {
+  contain: layout;
+}
+
+/* 图片格式优化 */
+.picture-source {
+  width: 100%;
+  height: auto;
+}
+
+/* SVG优化 */
+svg {
+  shape-rendering: geometricPrecision;
+  text-rendering: geometricPrecision;
+  image-rendering: optimizeQuality;
+}
+
+/* Canvas优化 */
+canvas {
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* 避免强制同步布局 */
+.no-layout-thrashing {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* 减少重绘 */
+.no-repaint {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 避免回流 */
+.no-reflow {
+  contain: layout;
+}
+
+/* 事件委托优化 */
+.event-delegation {
+  pointer-events: none;
+}
+
+.event-delegation * {
+  pointer-events: auto;
+}
+
+/* 虚拟滚动优化 */
+.virtual-scroll {
+  contain: strict;
+  content-visibility: auto;
+}
+
+/* 列表渲染优化 */
+.list-item-optimized {
+  contain: layout style paint;
+  content-visibility: auto;
+}
+
+/* 卡片渲染优化 */
+.card-optimized {
+  contain: layout style paint;
+  will-change: transform;
+}
+
+/* 模态框渲染优化 */
+.modal-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 下拉菜单渲染优化 */
+.dropdown-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 工具提示渲染优化 */
+.tooltip-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 通知渲染优化 */
+.notification-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 进度条渲染优化 */
+.progress-optimized {
+  contain: layout style paint;
+  will-change: width;
+}
+
+/* 加载状态优化 */
+.loading-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 骨架屏优化 */
+.skeleton-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 动画优化 */
+.animation-optimized {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* 过渡优化 */
+.transition-optimized {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* 悬停效果优化 */
+.hover-optimized {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* 焦点效果优化 */
+.focus-optimized {
+  will-change: outline, outline-offset;
+}
+
+/* 滚动优化 */
+.scroll-optimized {
+  contain: strict;
+  overflow-anchor: none;
+}
+
+/* 拖拽优化 */
+.drag-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 缩放优化 */
+.zoom-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 旋转优化 */
+.rotate-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 滑动优化 */
+.swipe-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 手势优化 */
+.gesture-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 触摸优化 */
+.touch-optimized {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+  contain: strict;
+}
+
+/* 键盘导航优化 */
+.keyboard-optimized {
+  contain: layout style;
+}
+
+/* 鼠标交互优化 */
+.mouse-optimized {
+  contain: layout style;
+}
+
+/* 表单优化 */
+.form-optimized {
+  contain: layout style;
+}
+
+/* 输入框优化 */
+.input-optimized {
+  contain: layout style;
+  will-change: border-color, box-shadow;
+}
+
+/* 按钮优化 */
+.button-optimized {
+  contain: layout style;
+  will-change: transform, box-shadow;
+}
+
+/* 选择器优化 */
+.select-optimized {
+  contain: layout style;
+  will-change: border-color, box-shadow;
+}
+
+/* 复选框优化 */
+.checkbox-optimized {
+  contain: layout style;
+  will-change: border-color, background-color;
+}
+
+/* 单选框优化 */
+.radio-optimized {
+  contain: layout style;
+  will-change: border-color, background-color;
+}
+
+/* 开关优化 */
+.switch-optimized {
+  contain: layout style;
+  will-change: transform, background-color;
+}
+
+/* 滑块优化 */
+.slider-optimized {
+  contain: layout style;
+  will-change: transform;
+}
+
+/* 进度条优化 */
+.progress-bar-optimized {
+  contain: layout style paint;
+  will-change: width;
+}
+
+/* 徽章优化 */
+.badge-optimized {
+  contain: layout style;
+}
+
+/* 标签优化 */
+.tag-optimized {
+  contain: layout style;
+}
+
+/* 头像优化 */
+.avatar-optimized {
+  contain: layout style;
+}
+
+/* 图标优化 */
+.icon-optimized {
+  contain: layout style;
+}
+
+/* 分隔线优化 */
+.divider-optimized {
+  contain: layout style;
+}
+
+/* 空状态优化 */
+.empty-optimized {
+  contain: layout style;
+}
+
+/* 错误状态优化 */
+.error-optimized {
+  contain: layout style;
+}
+
+/* 警告状态优化 */
+.warning-optimized {
+  contain: layout style;
+}
+
+/* 成功状态优化 */
+.success-optimized {
+  contain: layout style;
+}
+
+/* 信息状态优化 */
+.info-optimized {
+  contain: layout style;
+}
+
+/* 加载状态优化 */
+.loading-spinner-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 骨架屏动画优化 */
+.skeleton-animation-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 淡入动画优化 */
+.fade-in-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 滑入动画优化 */
+.slide-in-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 缩放动画优化 */
+.scale-in-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 旋转动画优化 */
+.rotate-in-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 弹跳动画优化 */
+.bounce-in-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 闪烁动画优化 */
+.pulse-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 旋转动画优化 */
+.spin-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 摇晃动画优化 */
+.shake-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 弹出动画优化 */
+.pop-in-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 滑出动画优化 */
+.slide-out-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 缩放动画优化 */
+.zoom-out-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 淡出动画优化 */
+.fade-out-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 翻转动画优化 */
+.flip-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 3D旋转动画优化 */
+.rotate-3d-optimized {
+  contain: strict;
+  will-change: transform;
+  perspective: 1000px;
+  backface-visibility: hidden;
+}
+
+/* 玻璃态效果优化 */
+.glass-optimized {
+  contain: strict;
+  will-change: backdrop-filter;
+}
+
+/* 模糊效果优化 */
+.blur-optimized {
+  contain: strict;
+  will-change: filter;
+}
+
+/* 阴影效果优化 */
+.shadow-optimized {
+  contain: layout style paint;
+  will-change: box-shadow;
+}
+
+/* 渐变效果优化 */
+.gradient-optimized {
+  contain: layout style paint;
+}
+
+/* 边框效果优化 */
+.border-optimized {
+  contain: layout style paint;
+}
+
+/* 圆角效果优化 */
+.border-radius-optimized {
+  contain: layout style paint;
+}
+
+/* 背景效果优化 */
+.background-optimized {
+  contain: layout style paint;
+}
+
+/* 文本效果优化 */
+.text-effect-optimized {
+  contain: layout style paint;
+}
+
+/* 图标效果优化 */
+.icon-effect-optimized {
+  contain: layout style paint;
+}
+
+/* 按钮效果优化 */
+.button-effect-optimized {
+  contain: layout style paint;
+  will-change: transform, box-shadow;
+}
+
+/* 卡片效果优化 */
+.card-effect-optimized {
+  contain: layout style paint;
+  will-change: transform, box-shadow;
+}
+
+/* 列表项效果优化 */
+.list-item-effect-optimized {
+  contain: layout style paint;
+  will-change: transform, background-color;
+}
+
+/* 表格行效果优化 */
+.table-row-effect-optimized {
+  contain: layout style paint;
+  will-change: background-color;
+}
+
+/* 表格单元格效果优化 */
+.table-cell-effect-optimized {
+  contain: layout style paint;
+  will-change: background-color;
+}
+
+/* 标签页效果优化 */
+.tab-effect-optimized {
+  contain: layout style paint;
+  will-change: background-color, border-color;
+}
+
+/* 面板效果优化 */
+.panel-effect-optimized {
+  contain: layout style paint;
+  will-change: transform, opacity;
+}
+
+/* 折叠面板效果优化 */
+.collapse-effect-optimized {
+  contain: strict;
+  will-change: max-height;
+}
+
+/* 手风琴效果优化 */
+.accordion-effect-optimized {
+  contain: strict;
+  will-change: max-height;
+}
+
+/* 模态框效果优化 */
+.modal-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 抽屉效果优化 */
+.drawer-effect-optimized {
+  contain: strict;
+  will-change: transform;
+}
+
+/* 下拉菜单效果优化 */
+.dropdown-effect-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 工具提示效果优化 */
+.tooltip-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 气泡框效果优化 */
+.popover-effect-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 通知效果优化 */
+.notification-effect-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 消息提示效果优化 */
+.message-effect-optimized {
+  contain: strict;
+  will-change: transform, opacity;
+}
+
+/* 全局加载效果优化 */
+.global-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 页面加载效果优化 */
+.page-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 内容加载效果优化 */
+.content-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 图片加载效果优化 */
+.image-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 视频加载效果优化 */
+.video-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 音频加载效果优化 */
+.audio-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 文件加载效果优化 */
+.file-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 数据加载效果优化 */
+.data-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 网络请求加载效果优化 */
+.request-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 异步操作加载效果优化 */
+.async-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 表单提交加载效果优化 */
+.form-submit-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 按钮点击加载效果优化 */
+.button-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 链接点击加载效果优化 */
+.link-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 菜单项点击加载效果优化 */
+.menu-item-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 列表项点击加载效果优化 */
+.list-item-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 卡片点击加载效果优化 */
+.card-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 图片点击加载效果优化 */
+.image-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 视频点击加载效果优化 */
+.video-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 音频点击加载效果优化 */
+.audio-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 文件点击加载效果优化 */
+.file-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 数据点击加载效果优化 */
+.data-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 网络请求点击加载效果优化 */
+.request-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 异步操作点击加载效果优化 */
+.async-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}
+
+/* 表单提交点击加载效果优化 */
+.form-submit-click-loading-effect-optimized {
+  contain: strict;
+  will-change: opacity;
+}

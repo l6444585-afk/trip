@@ -1,0 +1,20 @@
+第一步：启动后端服务,打开命令行窗口（CMD或PowerShell）
+# 切换到D盘的后端目录
+cd /d d:\Trae\trip\travel-planner\backend
+
+# 激活虚拟环境
+venv\Scripts\activate
+
+# 运行后端服务
+python main.py
+
+
+
+第二步：启动前端服务
+
+1. 打开另一个命令行窗口
+2. 执行以下命令：
+cd d:\Trae\trip\travel-planner\frontend
+npm start
+
+执行以上就可以启动该系统

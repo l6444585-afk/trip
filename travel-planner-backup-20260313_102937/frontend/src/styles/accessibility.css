@@ -1,0 +1,1050 @@
+/* 无障碍访问改进 */
+
+/* 跳过导航链接 */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #667eea;
+  color: #fff;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  transition: top 0.3s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* 屏幕阅读器专用 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* 焦点可见性 */
+*:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 焦点样式 */
+.focus-ring {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 焦点指示器 */
+.focus-indicator {
+  position: relative;
+}
+
+.focus-indicator::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  transition: border-color 0.2s ease;
+  pointer-events: none;
+}
+
+.focus-indicator:focus-within::after {
+  border-color: #667eea;
+}
+
+/* 键盘导航 */
+.keyboard-nav {
+  outline: none;
+}
+
+.keyboard-nav:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ARIA标签 */
+[aria-label] {
+  cursor: pointer;
+}
+
+[aria-labelledby] {
+  cursor: pointer;
+}
+
+[aria-describedby] {
+  cursor: pointer;
+}
+
+/* 按钮无障碍 */
+.btn-accessible {
+  position: relative;
+}
+
+.btn-accessible::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* 链接无障碍 */
+.link-accessible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.link-accessible:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.link-accessible:hover:not(:focus) {
+  text-decoration-thickness: 2px;
+}
+
+/* 图片无障碍 */
+.img-accessible {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-accessible[alt=""] {
+  display: none;
+}
+
+/* 表单无障碍 */
+.form-accessible {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group-accessible {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-accessible {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.input-accessible {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.input-accessible:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.input-accessible[aria-invalid="true"] {
+  border-color: #f5222d;
+}
+
+.input-accessible[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(245, 34, 45, 0.1);
+}
+
+/* 错误消息 */
+.error-message {
+  color: #f5222d;
+  font-size: 14px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.error-message::before {
+  content: '⚠';
+}
+
+/* 成功消息 */
+.success-message {
+  color: #52c41a;
+  font-size: 14px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.success-message::before {
+  content: '✓';
+}
+
+/* 警告消息 */
+.warning-message {
+  color: #faad14;
+  font-size: 14px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.warning-message::before {
+  content: '⚠';
+}
+
+/* 信息消息 */
+.info-message {
+  color: #1890ff;
+  font-size: 14px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.info-message::before {
+  content: 'ℹ';
+}
+
+/* 复选框无障碍 */
+.checkbox-accessible {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox-accessible input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-accessible-indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e8e8e8;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox-accessible input[type="checkbox"]:focus + .checkbox-accessible-indicator {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.checkbox-accessible input[type="checkbox"]:checked + .checkbox-accessible-indicator {
+  background: #667eea;
+  border-color: #667eea;
+}
+
+.checkbox-accessible input[type="checkbox"]:checked + .checkbox-accessible-indicator::after {
+  content: '✓';
+  color: #fff;
+  font-size: 14px;
+}
+
+/* 单选框无障碍 */
+.radio-accessible {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.radio-accessible input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-accessible-indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e8e8e8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.radio-accessible input[type="radio"]:focus + .radio-accessible-indicator {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.radio-accessible input[type="radio"]:checked + .radio-accessible-indicator {
+  border-color: #667eea;
+}
+
+.radio-accessible input[type="radio"]:checked + .radio-accessible-indicator::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #667eea;
+  border-radius: 50%;
+}
+
+/* 选择器无障碍 */
+.select-accessible {
+  position: relative;
+  width: 100%;
+}
+
+.select-accessible select {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  font-size: 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-accessible select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.select-accessible::after {
+  content: '▼';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #8a8a8a;
+  font-size: 12px;
+}
+
+/* 滑块无障碍 */
+.slider-accessible {
+  width: 100%;
+}
+
+.slider-accessible input[type="range"] {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #e8e8e8;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.slider-accessible input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #667eea;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider-accessible input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.slider-accessible input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #667eea;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.slider-accessible input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* 开关无障碍 */
+.switch-accessible {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.switch-accessible input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-accessible-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e8e8e8;
+  transition: 0.3s ease;
+  border-radius: 24px;
+}
+
+.switch-accessible-slider::before {
+  position: absolute;
+  content: '';
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  transition: 0.3s ease;
+  border-radius: 50%;
+}
+
+.switch-accessible input:focus + .switch-accessible-slider {
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.switch-accessible input:checked + .switch-accessible-slider {
+  background-color: #667eea;
+}
+
+.switch-accessible input:checked + .switch-accessible-slider::before {
+  transform: translateX(24px);
+}
+
+/* 进度条无障碍 */
+.progress-accessible {
+  width: 100%;
+  height: 8px;
+  background-color: #e8e8e8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-accessible-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 徽章无障碍 */
+.badge-accessible {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  background: #667eea;
+  border-radius: 10px;
+}
+
+/* 标签无障碍 */
+.tag-accessible {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 16px;
+  background: #f5f7fa;
+  color: #1a1a1a;
+}
+
+/* 卡片无障碍 */
+.card-accessible {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s ease;
+}
+
+.card-accessible:focus-within {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.card-accessible:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* 模态框无障碍 */
+.modal-accessible {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-accessible-content {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.modal-accessible-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #8a8a8a;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.modal-accessible-close:hover {
+  background: #f5f7fa;
+  color: #1a1a1a;
+}
+
+.modal-accessible-close:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 工具提示无障碍 */
+.tooltip-accessible {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-accessible-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.tooltip-accessible:hover .tooltip-accessible-content,
+.tooltip-accessible:focus .tooltip-accessible-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 下拉菜单无障碍 */
+.dropdown-accessible {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-accessible-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.dropdown-accessible.active .dropdown-accessible-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-accessible-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-accessible-item:hover,
+.dropdown-accessible-item:focus {
+  background: #f5f7fa;
+  outline: none;
+}
+
+/* 标签页无障碍 */
+.tabs-accessible {
+  display: flex;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.tabs-accessible-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tabs-accessible-item {
+  margin-right: -1px;
+}
+
+.tabs-accessible-button {
+  padding: 12px 24px;
+  background: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #8a8a8a;
+  transition: all 0.2s ease;
+  border-radius: 8px 8px 0 0;
+}
+
+.tabs-accessible-button:hover {
+  background: #f5f7fa;
+  color: #1a1a1a;
+}
+
+.tabs-accessible-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: -2px;
+}
+
+.tabs-accessible-button[aria-selected="true"] {
+  color: #667eea;
+  border-bottom: 2px solid #667eea;
+}
+
+/* 折叠面板无障碍 */
+.accordion-accessible {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accordion-accessible-item {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.accordion-accessible-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-accessible-header {
+  width: 100%;
+  padding: 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.accordion-accessible-header:hover {
+  background: #f5f7fa;
+}
+
+.accordion-accessible-header:focus {
+  outline: 2px solid #667eea;
+  outline-offset: -2px;
+}
+
+.accordion-accessible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.accordion-accessible-content[aria-expanded="true"] {
+  max-height: 1000px;
+}
+
+/* 表格无障碍 */
+.table-accessible {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-accessible caption {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.table-accessible th,
+.table-accessible td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.table-accessible th {
+  font-weight: 600;
+  background: #f5f7fa;
+  color: #1a1a1a;
+}
+
+.table-accessible tr:hover td {
+  background: #f5f7fa;
+}
+
+/* 列表无障碍 */
+.list-accessible {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-accessible-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
+}
+
+.list-accessible-item:hover {
+  background: #f5f7fa;
+}
+
+.list-accessible-item:focus {
+  outline: 2px solid #667eea;
+  outline-offset: -2px;
+}
+
+/* 导航无障碍 */
+.nav-accessible {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-accessible-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-accessible-item {
+  margin-bottom: 4px;
+}
+
+.nav-accessible-link {
+  display: block;
+  padding: 12px 16px;
+  color: #1a1a1a;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-accessible-link:hover {
+  background: #f5f7fa;
+  color: #667eea;
+}
+
+.nav-accessible-link:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.nav-accessible-link[aria-current="page"] {
+  background: #667eea;
+  color: #fff;
+}
+
+/* 面包屑无障碍 */
+.breadcrumb-accessible {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb-accessible-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb-accessible-link {
+  color: #667eea;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.breadcrumb-accessible-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-accessible-link:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.breadcrumb-accessible-separator {
+  color: #8a8a8a;
+}
+
+/* 搜索框无障碍 */
+.search-accessible {
+  position: relative;
+  width: 100%;
+}
+
+.search-accessible input {
+  width: 100%;
+  padding: 12px 48px 12px 16px;
+  font-size: 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.search-accessible input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-accessible-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a8a8a;
+  pointer-events: none;
+}
+
+/* 通知无障碍 */
+.notification-accessible {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  max-width: 400px;
+  z-index: 1000;
+  border-left: 4px solid #667eea;
+}
+
+.notification-accessible[role="alert"] {
+  border-left-color: #f5222d;
+}
+
+.notification-accessible[role="status"] {
+  border-left-color: #52c41a;
+}
+
+.notification-accessible-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #8a8a8a;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.notification-accessible-close:hover {
+  background: #f5f7fa;
+  color: #1a1a1a;
+}
+
+.notification-accessible-close:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 加载状态无障碍 */
+.loading-accessible {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loading-accessible-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e8e8e8;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-accessible-text {
+  font-size: 14px;
+  color: #8a8a8a;
+}
+
+/* 骨架屏无障碍 */
+.skeleton-accessible {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.skeleton-accessible[aria-hidden="true"] {
+  display: none;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 颜色对比度检查 */
+.text-contrast-high {
+  color: #1a1a1a;
+  background: #fff;
+}
+
+.text-contrast-medium {
+  color: #1a1a1a;
+  background: #f5f7fa;
+}
+
+/* 触摸目标大小 */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .card-accessible {
+    border-width: 2px;
+  }
+  
+  .btn-accessible {
+    border-width: 2px;
+  }
+  
+  .input-accessible {
+    border-width: 2px;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  body {
+    background: #fff;
+    color: #000;
+  }
+  
+  .card-accessible {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .btn-accessible {
+    display: none;
+  }
+}

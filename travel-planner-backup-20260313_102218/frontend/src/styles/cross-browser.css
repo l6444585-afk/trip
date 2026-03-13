@@ -1,0 +1,627 @@
+/* 跨浏览器兼容性优化 */
+
+/* CSS变量回退 */
+:root {
+  --primary-color: #667eea;
+  --primary-color-fallback: #667eea;
+}
+
+/* 浏览器前缀 */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.9);
+  }
+}
+
+/* Flexbox回退 */
+.flexbox-fallback {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@supports not (display: flex) {
+  .flexbox-fallback {
+    display: block;
+  }
+  
+  .flexbox-fallback > * {
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+/* Grid回退 */
+.grid-fallback {
+  display: -ms-grid;
+  display: grid;
+}
+
+@supports not (display: grid) {
+  .grid-fallback {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .grid-fallback > * {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 200px;
+    flex: 1 0 200px;
+  }
+}
+
+/* 渐变回退 */
+.gradient-fallback {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: -webkit-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: -moz-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: -o-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: -ms-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+@supports not (background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)) {
+  .gradient-fallback {
+    background-color: #667eea;
+  }
+}
+
+/* 圆角回退 */
+.border-radius-fallback {
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+
+/* 阴影回退 */
+.box-shadow-fallback {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 变换回退 */
+.transform-fallback {
+  transform: translateY(-4px);
+  -webkit-transform: translateY(-4px);
+  -moz-transform: translateY(-4px);
+  -ms-transform: translateY(-4px);
+  -o-transform: translateY(-4px);
+}
+
+/* 过渡回退 */
+.transition-fallback {
+  transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+}
+
+/* 动画回退 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animation-fallback {
+  animation: fadeIn 0.3s ease;
+  -webkit-animation: fadeIn 0.3s ease;
+  -moz-animation: fadeIn 0.3s ease;
+}
+
+/* 文本裁剪回退 */
+.text-clip-fallback {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@supports not (-webkit-background-clip: text) {
+  .text-clip-fallback {
+    color: #667eea;
+    background: none;
+    -webkit-text-fill-color: initial;
+  }
+}
+
+/* 滤镜回退 */
+.filter-fallback {
+  filter: blur(10px);
+  -webkit-filter: blur(10px);
+  -moz-filter: blur(10px);
+  -o-filter: blur(10px);
+  -ms-filter: blur(10px);
+}
+
+@supports not (filter: blur(10px)) {
+  .filter-fallback {
+    opacity: 0.8;
+  }
+}
+
+/* 滚动条样式回退 */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+@supports not (selector(::-webkit-scrollbar)) {
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: #c0c0c0 #f0f0f0;
+  }
+}
+
+/* 选择样式回退 */
+.select-custom {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+/* 占位符样式回退 */
+.placeholder-custom::placeholder {
+  color: #8a8a8a;
+  opacity: 1;
+}
+
+.placeholder-custom::-webkit-input-placeholder {
+  color: #8a8a8a;
+  opacity: 1;
+}
+
+.placeholder-custom::-moz-placeholder {
+  color: #8a8a8a;
+  opacity: 1;
+}
+
+.placeholder-custom:-ms-input-placeholder {
+  color: #8a8a8a;
+  opacity: 1;
+}
+
+/* 焦点样式回退 */
+.focus-ring:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.focus-ring::-moz-focus-inner {
+  border: 0;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* 文本选择回退 */
+.selection-custom::selection {
+  background: rgba(102, 126, 234, 0.2);
+  color: inherit;
+}
+
+.selection-custom::-moz-selection {
+  background: rgba(102, 126, 234, 0.2);
+  color: inherit;
+}
+
+.selection-custom::-webkit-selection {
+  background: rgba(102, 126, 234, 0.2);
+  color: inherit;
+}
+
+/* 图片渲染回退 */
+.img-rendering {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* 字体特性回退 */
+.font-feature {
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-feature-settings: "liga" 1, "kern" 1;
+  -moz-font-feature-settings: "liga" 1, "kern" 1;
+  -ms-font-feature-settings: "liga" 1, "kern" 1;
+}
+
+/* 文本对齐回退 */
+.text-align-last {
+  text-align-last: center;
+  -moz-text-align-last: center;
+}
+
+/* 单词换行回退 */
+.word-break-custom {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-word-break: break-all;
+}
+
+/* 用户选择回退 */
+.user-select-none {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.user-select-text {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* 触摸操作回退 */
+.touch-action {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+}
+
+/* 溢出回退 */
+.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+}
+
+/* 多行文本溢出回放 */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@supports not (-webkit-line-clamp: 3) {
+  .line-clamp {
+    display: block;
+    max-height: 4.5em;
+    line-height: 1.5;
+    position: relative;
+  }
+  
+  .line-clamp::after {
+    content: '...';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: inherit;
+    padding-left: 8px;
+  }
+}
+
+/* 粘性定位回退 */
+.sticky-fallback {
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+  position: sticky;
+}
+
+@supports not (position: sticky) {
+  .sticky-fallback {
+    position: relative;
+  }
+}
+
+/* 混合模式回退 */
+.blend-mode {
+  mix-blend-mode: multiply;
+  -webkit-mix-blend-mode: multiply;
+  -moz-mix-blend-mode: multiply;
+  -ms-mix-blend-mode: multiply;
+}
+
+@supports not (mix-blend-mode: multiply) {
+  .blend-mode {
+    opacity: 0.8;
+  }
+}
+
+/* 对象适配回退 */
+.object-fit-cover {
+  object-fit: cover;
+  -o-object-fit: cover;
+}
+
+@supports not (object-fit: cover) {
+  .object-fit-cover {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  .object-fit-cover img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+  }
+}
+
+/* 宽高比回退 */
+.aspect-ratio {
+  aspect-ratio: 16 / 9;
+}
+
+@supports not (aspect-ratio: 16 / 9) {
+  .aspect-ratio {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+  }
+  
+  .aspect-ratio > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* 间隙回退 */
+.gap-fallback {
+  gap: 16px;
+  -webkit-gap: 16px;
+  -moz-gap: 16px;
+}
+
+@supports not (gap: 16px) {
+  .gap-fallback > * + * {
+    margin-left: 16px;
+  }
+  
+  .gap-fallback.flex-column > * + * {
+    margin-left: 0;
+    margin-top: 16px;
+  }
+}
+
+/* 滚动捕捉回退 */
+.scroll-snap {
+  scroll-snap-type: x mandatory;
+  -webkit-scroll-snap-type: x mandatory;
+  -ms-scroll-snap-type: x mandatory;
+}
+
+.scroll-snap > * {
+  scroll-snap-align: start;
+  -webkit-scroll-snap-align: start;
+  -ms-scroll-snap-align: start;
+}
+
+/* IE11特定修复 */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .flexbox-fallback {
+    display: -ms-flexbox;
+  }
+  
+  .grid-fallback {
+    display: -ms-grid;
+  }
+  
+  .glass {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .gradient-fallback {
+    background: #667eea;
+  }
+  
+  .text-clip-fallback {
+    color: #667eea;
+    background: none;
+  }
+}
+
+/* Safari特定修复 */
+@supports (-webkit-backdrop-filter: blur(10px)) {
+  .glass {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Firefox特定修复 */
+@supports (-moz-appearance: none) {
+  .select-custom {
+    -moz-appearance: none;
+  }
+}
+
+/* Chrome特定修复 */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .img-rendering {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* 移动Safari特定修复 */
+@supports (-webkit-touch-callout: none) {
+  .user-select-none {
+    -webkit-touch-callout: none;
+  }
+}
+
+/* 触摸设备特定修复 */
+@media (hover: none) and (pointer: coarse) {
+  .hover-effect {
+    transition: none;
+  }
+  
+  .hover-effect:hover {
+    transform: none;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  .btn {
+    border-width: 2px;
+  }
+  
+  .input {
+    border-width: 2px;
+  }
+}
+
+/* 减少透明度 */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: #ffffff;
+  }
+  
+  .glass-dark {
+    background: #000000;
+  }
+}
+
+/* 强制颜色模式 */
+@media (forced-colors: active) {
+  .card {
+    border: 2px solid CanvasText;
+    background: Canvas;
+  }
+  
+  .btn {
+    border: 2px solid CanvasText;
+  }
+  
+  .input {
+    border: 2px solid CanvasText;
+  }
+}
+
+/* 打印模式 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* 性能优化 */
+.will-change-transform {
+  will-change: transform;
+  -webkit-will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+  -webkit-will-change: opacity;
+}
+
+.contain-layout {
+  contain: layout;
+  -webkit-contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+  -webkit-contain: paint;
+}
+
+.contain-style {
+  contain: style;
+  -webkit-contain: style;
+}
+
+/* GPU加速 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+}
+
+/* 硬件加速 */
+.hardware-accelerated {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+}
+
+/* 避免文本闪烁 */
+.text-rendering-optimize {
+  text-rendering: optimizeLegibility;
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  -ms-text-rendering: optimizeLegibility;
+}
+
+/* 字体平滑 */
+.font-smoothing {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 避免子像素渲染 */
+.subpixel-antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

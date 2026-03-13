@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能记账 - 江浙沪旅游行程规划</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .gradient-text {
+            background: var(--bg-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-bg {
+            background: var(--bg-gradient);
+        }
+        
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .expense-item {
+            transition: all 0.3s ease;
+        }
+        
+        .expense-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: var(--bg-gradient);
+            border-radius: 2px;
+        }
+        
+        .ai-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .float-button {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .payment-method {
+            transition: all 0.2s ease;
+        }
+        
+        .payment-method:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .suggestion-card {
+            transition: all 0.3s ease;
+        }
+        
+        .suggestion-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .scanner-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        .receipt-preview {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+        }
+        
+        .budget-warning {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- 顶部导航 -->
+    <header class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calculator text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">AI智能记账</h1>
+                        <p class="text-xs text-white/80">江浙沪旅游行程规划</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2 bg-white/10 rounded-full px-4 py-2">
+                        <i class="fas fa-route text-sm"></i>
+                        <span class="text-sm">上海-苏州-杭州 5日游</span>
+                    </div>
+                    <button class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-3 right-4 w-2 h-2 bg-red-400 rounded-full"></span>
+                    </button>
+                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">
+                        游
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- 页面标签导航 -->
+        <div class="flex space-x-1 bg-white rounded-2xl p-1.5 shadow-sm mb-6 overflow-x-auto">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-item active flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap">
+                <i class="fas fa-chart-pie"></i>
+                <span>概览仪表盘</span>
+            </button>
+            <button onclick="switchTab('records')" id="tab-records" class="nav-item flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap">
+                <i class="fas fa-list-alt"></i>
+                <span>消费记录</span>
+            </button>
+            <button onclick="switchTab('statistics')" id="tab-statistics" class="nav-item flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap">
+                <i class="fas fa-chart-line"></i>
+                <span>统计分析</span>
+            </button>
+            <button onclick="switchTab('budget')" id="tab-budget" class="nav-item flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap">
+                <i class="fas fa-wallet"></i>
+                <span>预算管理</span>
+            </button>
+            <button onclick="switchTab('ai-advice')" id="tab-ai-advice" class="nav-item flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap">
+                <i class="fas fa-robot text-purple-500"></i>
+                <span>AI建议</span>
+                <span class="ai-badge ml-1 w-2 h-2 bg-purple-500 rounded-full"></span>
+            </button>
+        </div>
+
+        <!-- 概览仪表盘 -->
+        <div id="content-dashboard" class="tab-content active">
+            <!-- 关键指标卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="stat-card glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-yen-sign text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">今日</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">总支出</p>
+                    <h3 class="text-2xl font-bold text-gray-800">¥<span id="total-expense">2,458</span></h3>
+                    <p class="text-xs text-green-500 mt-2 flex items-center">
+                        <i class="fas fa-arrow-down mr-1"></i>
+                        比昨日减少 12%
+                    </p>
+                </div>
+
+                <div class="stat-card glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-piggy-bank text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">剩余</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">预算余额</p>
+                    <h3 class="text-2xl font-bold text-gray-800">¥<span id="budget-remaining">3,542</span></h3>
+                    <p class="text-xs text-blue-500 mt-2 flex items-center">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        预算使用率 41%
+                    </p>
+                </div>
+
+                <div class="stat-card glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-receipt text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">总计</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">消费笔数</p>
+                    <h3 class="text-2xl font-bold text-gray-800"><span id="expense-count">18</span>笔</h3>
+                    <p class="text-xs text-gray-500 mt-2">平均每笔 ¥136</p>
+                </div>
+
+                <div class="stat-card glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-utensils text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">最高</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">最大支出类别</p>
+                    <h3 class="text-2xl font-bold text-gray-800">餐饮</h3>
+                    <p class="text-xs text-orange-500 mt-2">占比 35%</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 消费分布图表 -->
+                <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-gray-800">消费分布</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-xs rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">今日</button>
+                            <button class="px-3 py-1 text-xs rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white">本周</button>
+                            <button class="px-3 py-1 text-xs rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">本月</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 快捷操作 -->
+                <div class="space-y-6">
+                    <!-- AI快速记账 -->
+                    <div class="glass-card rounded-2xl p-6 shadow-sm border-2 border-purple-100">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center text-white">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">AI智能识别</h4>
+                                <p class="text-xs text-gray-500">拍照或语音快速记账</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="openCameraModal()" class="flex items-center justify-center space-x-2 p-3 bg-purple-50 rounded-xl text-purple-600 hover:bg-purple-100 transition">
+                                <i class="fas fa-camera"></i>
+                                <span class="text-sm font-medium">拍照识别</span>
+                            </button>
+                            <button onclick="openVoiceModal()" class="flex items-center justify-center space-x-2 p-3 bg-pink-50 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                                <i class="fas fa-microphone"></i>
+                                <span class="text-sm font-medium">语音记账</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 最近消费 -->
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-bold text-gray-800">最近消费</h4>
+                            <button onclick="switchTab('records')" class="text-sm text-blue-500 hover:text-blue-600">查看全部</button>
+                        </div>
+                        <div class="space-y-3" id="recent-expenses">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 消费记录 -->
+        <div id="content-records" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 左侧：消费列表 -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- 筛选栏 -->
+                    <div class="glass-card rounded-2xl p-4 shadow-sm">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-2">
+                                <i class="fas fa-filter text-gray-400"></i>
+                                <span class="text-sm text-gray-600">筛选:</span>
+                            </div>
+                            <select id="filter-category" class="bg-gray-100 rounded-lg px-3 py-2 text-sm border-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">全部类别</option>
+                                <option value="food">餐饮</option>
+                                <option value="transport">交通</option>
+                                <option value="accommodation">住宿</option>
+                                <option value="attraction">景点</option>
+                                <option value="shopping">购物</option>
+                                <option value="other">其他</option>
+                            </select>
+                            <select id="filter-date" class="bg-gray-100 rounded-lg px-3 py-2 text-sm border-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">全部时间</option>
+                                <option value="today">今天</option>
+                                <option value="week">本周</option>
+                                <option value="month">本月</option>
+                            </select>
+                            <select id="filter-payment" class="bg-gray-100 rounded-lg px-3 py-2 text-sm border-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">支付方式</option>
+                                <option value="alipay">支付宝</option>
+                                <option value="wechat">微信支付</option>
+                                <option value="cash">现金</option>
+                                <option value="card">银行卡</option>
+                            </select>
+                            <button onclick="resetFilters()" class="ml-auto text-sm text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-undo mr-1"></i>重置
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 消费列表 -->
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-gray-800">消费明细</h3>
+                            <button onclick="openAddModal()" class="gradient-bg text-white px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition flex items-center space-x-2">
+                                <i class="fas fa-plus"></i>
+                                <span>记一笔</span>
+                            </button>
+                        </div>
+                        <div class="space-y-4" id="expense-list">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：分类统计 -->
+                <div class="space-y-6">
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-4">分类统计</h4>
+                        <div class="space-y-4" id="category-stats">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-4">支付方式占比</h4>
+                        <div class="chart-container" style="height: 200px;">
+                            <canvas id="paymentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计分析 -->
+        <div id="content-statistics" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 消费趋势 -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-gray-800">消费趋势</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-xs rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white">按日</button>
+                            <button class="px-3 py-1 text-xs rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">按周</button>
+                            <button class="px-3 py-1 text-xs rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">按月</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 类别对比 -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">类别对比</h3>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 行程消费对比 -->
+                <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">每日消费明细</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-sm text-gray-500 border-b">
+                                    <th class="pb-3 font-medium">日期</th>
+                                    <th class="pb-3 font-medium">餐饮</th>
+                                    <th class="pb-3 font-medium">交通</th>
+                                    <th class="pb-3 font-medium">住宿</th>
+                                    <th class="pb-3 font-medium">景点</th>
+                                    <th class="pb-3 font-medium">购物</th>
+                                    <th class="pb-3 font-medium text-right">总计</th>
+                                </tr>
+                            </thead>
+                            <tbody id="daily-stats" class="text-sm">
+                                <!-- 动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 预算管理 -->
+        <div id="content-budget" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 预算总览 -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">预算总览</h3>
+                    <div class="text-center mb-6">
+                        <div class="relative inline-block">
+                            <svg class="progress-ring" width="200" height="200">
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+                                <circle id="budget-ring" cx="100" cy="100" r="90" fill="none" stroke="url(#gradient)" stroke-width="12"
+                                    stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="339.29"/>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#667eea"/>
+                                        <stop offset="100%" stop-color="#764ba2"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-3xl font-bold text-gray-800">60%</span>
+                                <span class="text-sm text-gray-500">已使用</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">总预算</span>
+                            <span class="font-bold text-gray-800">¥6,000</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">已支出</span>
+                            <span class="font-bold text-gray-800">¥2,458</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">剩余预算</span>
+                            <span class="font-bold text-green-500">¥3,542</span>
+                        </div>
+                    </div>
+                    <button onclick="openBudgetModal()" class="w-full mt-6 py-3 border-2 border-blue-500 text-blue-500 rounded-xl font-medium hover:bg-blue-50 transition">
+                        调整预算
+                    </button>
+                </div>
+
+                <!-- 分类预算 -->
+                <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-gray-800">分类预算</h3>
+                        <button onclick="openCategoryBudgetModal()" class="text-sm text-blue-500 hover:text-blue-600">
+                            <i class="fas fa-edit mr-1"></i>编辑预算
+                        </button>
+                    </div>
+                    <div class="space-y-6" id="category-budgets">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+
+                <!-- 预算预警设置 -->
+                <div class="lg:col-span-3 glass-card rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">预算预警设置</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">预算预警</p>
+                                    <p class="text-xs text-gray-500">达到80%时提醒</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center text-red-600">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">超支提醒</p>
+                                    <p class="text-xs text-gray-500">超出预算时提醒</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">每日报告</p>
+                                    <p class="text-xs text-gray-500">每日消费汇总</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI建议 -->
+        <div id="content-ai-advice" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- AI助手 -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="glass-card rounded-2xl p-6 shadow-sm border-2 border-purple-100">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">AI消费助手</h3>
+                                <p class="text-sm text-gray-500">基于您的消费数据提供个性化建议</p>
+                            </div>
+                            <div class="ml-auto">
+                                <span class="ai-badge px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-medium">
+                                    <i class="fas fa-bolt mr-1"></i>AI分析中
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4" id="ai-suggestions">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 消费优化建议 -->
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            消费优化建议
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="optimization-tips">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 侧边栏 -->
+                <div class="space-y-6">
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-4">消费健康评分</h4>
+                        <div class="text-center">
+                            <div class="relative inline-block mb-4">
+                                <svg class="progress-ring" width="150" height="150">
+                                    <circle cx="75" cy="75" r="65" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                                    <circle cx="75" cy="75" r="65" fill="none" stroke="#10b981" stroke-width="10"
+                                        stroke-linecap="round" stroke-dasharray="408.4" stroke-dashoffset="81.68"/>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-4xl font-bold text-gray-800">85</span>
+                                    <span class="text-xs text-gray-500">健康度</span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">您的消费结构合理，继续保持！</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-4">同类行程对比</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">您的消费</span>
+                                <span class="font-bold text-gray-800">¥2,458</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">平均消费</span>
+                                <span class="text-gray-500">¥3,200</span>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg">
+                                <p class="text-sm text-green-700">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    比平均水平节省 23%
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 添加消费弹窗 -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-gray-800">记一笔</h3>
+                    <button onclick="closeModal('add-modal')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+                        <i class="fas fa-times text-gray-500"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="expense-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">金额</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">¥</span>
+                            <input type="number" id="expense-amount" step="0.01" placeholder="0.00" 
+                                class="w-full pl-10 pr-4 py-3 text-2xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">类别</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="category" value="food" class="hidden peer" checked>
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 mb-2">
+                                        <i class="fas fa-utensils"></i>
+                                    </div>
+                                    <span class="text-xs font-medium">餐饮</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="category" value="transport" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-500 mb-2">
+                                        <i class="fas fa-bus"></i>
+                                    </div>
+                                    <span class="text-xs font-medium">交通</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="category" value="accommodation" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-500 mb-2">
+                                        <i class="fas fa-bed"></i>
+                                    </div>
+                                    <span class="text-xs font-medium">住宿</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="category" value="attraction" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-500 mb-2">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </div>
+                                    <span class="text-xs font-medium">景点</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="category" value="shopping" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center text-pink-500 mb-2">
+                                        <i class="fas fa-shopping-bag"></i>
+                                    </div>
+                                    <span class="text-xs font-medium">购物</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="category" value="other" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 mb-2">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </div>
+                                    <span class="text-xs font-medium">其他</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">支付方式</label>
+                        <div class="grid grid-cols-4 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="payment" value="alipay" class="hidden peer" checked>
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <i class="fab fa-alipay text-2xl text-blue-500 mb-1"></i>
+                                    <span class="text-xs">支付宝</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="payment" value="wechat" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <i class="fab fa-weixin text-2xl text-green-500 mb-1"></i>
+                                    <span class="text-xs">微信</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="payment" value="cash" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <i class="fas fa-money-bill-wave text-2xl text-green-600 mb-1"></i>
+                                    <span class="text-xs">现金</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="payment" value="card" class="hidden peer">
+                                <div class="payment-method flex flex-col items-center p-3 border-2 border-gray-200 rounded-xl peer-checked:border-blue-500 peer-checked:bg-blue-50 transition">
+                                    <i class="fas fa-credit-card text-2xl text-purple-500 mb-1"></i>
+                                    <span class="text-xs">银行卡</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">备注</label>
+                        <input type="text" id="expense-note" placeholder="添加备注（可选）" 
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">时间</label>
+                        <input type="datetime-local" id="expense-time" 
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </form>
+            </div>
+            <div class="p-6 border-t bg-gray-50 rounded-b-2xl">
+                <div class="flex space-x-3">
+                    <button onclick="closeModal('add-modal')" class="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition">
+                        取消
+                    </button>
+                    <button onclick="saveExpense()" class="flex-1 py-3 gradient-bg text-white rounded-xl font-medium hover:opacity-90 transition">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 拍照识别弹窗 -->
+    <div id="camera-modal" class="modal">
+        <div class="modal-content">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-gray-800">
+                        <i class="fas fa-magic text-purple-500 mr-2"></i>AI拍照识别
+                    </h3>
+                    <button onclick="closeModal('camera-modal')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+                        <i class="fas fa-times text-gray-500"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="receipt-preview rounded-2xl p-8 text-center mb-6 relative overflow-hidden">
+                    <div class="scanner-line"></div>
+                    <i class="fas fa-receipt text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">将收据放入框内，AI将自动识别消费信息</p>
+                </div>
+                <div class="bg-purple-50 rounded-xl p-4 mb-6">
+                    <h4 class="font-medium text-purple-800 mb-2 flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>AI识别能力
+                    </h4>
+                    <ul class="text-sm text-purple-700 space-y-1">
+                        <li>• 自动识别金额、时间、商家</li>
+                        <li>• 智能分类消费类型</li>
+                        <li>• 支持发票、小票、电子账单</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-6 border-t bg-gray-50 rounded-b-2xl">
+                <button onclick="simulateAIRecognition()" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:opacity-90 transition flex items-center justify-center space-x-2">
+                    <i class="fas fa-camera"></i>
+                    <span>模拟识别</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 语音记账弹窗 -->
+    <div id="voice-modal" class="modal">
+        <div class="modal-content">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-gray-800">
+                        <i class="fas fa-microphone text-pink-500 mr-2"></i>语音记账
+                    </h3>
+                    <button onclick="closeModal('voice-modal')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+                        <i class="fas fa-times text-gray-500"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <div class="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white text-3xl mx-auto mb-6 float-button">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <p class="text-lg text-gray-700 mb-2">请说出消费内容</p>
+                <p class="text-sm text-gray-500 mb-6">例如："午餐吃了碗面，花了25元"</p>
+                
+                <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                    <p class="text-sm text-gray-600 mb-2">识别示例：</p>
+                    <div class="space-y-2 text-left">
+                        <div class="flex items-center space-x-2 text-sm">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span class="text-gray-600">"打车去外滩30块钱" → 交通 ¥30</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span class="text-gray-600">"买了杯奶茶18元" → 餐饮 ¥18</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span class="text-gray-600">"酒店住宿一晚500" → 住宿 ¥500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t bg-gray-50 rounded-b-2xl">
+                <button onclick="simulateVoiceInput()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl font-medium hover:opacity-90 transition">
+                    模拟语音输入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 悬浮添加按钮 -->
+    <button onclick="openAddModal()" class="fixed bottom-8 right-8 w-16 h-16 gradient-bg text-white rounded-full shadow-lg hover:shadow-xl transition flex items-center justify-center text-2xl float-button z-40">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <script>
+        // 模拟数据
+        let expenses = [
+            { id: 1, amount: 128, category: 'food', payment: 'alipay', note: '南翔小笼包', time: '2024-01-15T08:30', date: '2024-01-15' },
+            { id: 2, amount: 35, category: 'transport', payment: 'wechat', note: '地铁', time: '2024-01-15T09:15', date: '2024-01-15' },
+            { id: 3, amount: 580, category: 'accommodation', payment: 'alipay', note: '外滩酒店', time: '2024-01-15T14:00', date: '2024-01-15' },
+            { id: 4, amount: 120, category: 'attraction', payment: 'wechat', note: '东方明珠门票', time: '2024-01-15T10:30', date: '2024-01-15' },
+            { id: 5, amount: 88, category: 'food', payment: 'cash', note: '晚餐', time: '2024-01-15T19:00', date: '2024-01-15' },
+            { id: 6, amount: 256, category: 'shopping', payment: 'card', note: '特产', time: '2024-01-15T16:30', date: '2024-01-15' },
+            { id: 7, amount: 45, category: 'transport', payment: 'alipay', note: '打车', time: '2024-01-14T20:00', date: '2024-01-14' },
+            { id: 8, amount: 168, category: 'food', payment: 'wechat', note: '午餐', time: '2024-01-14T12:30', date: '2024-01-14' },
+            { id: 9, amount: 80, category: 'attraction', payment: 'alipay', note: '豫园门票', time: '2024-01-14T09:00', date: '2024-01-14' },
+            { id: 10, amount: 320, category: 'accommodation', payment: 'card', note: '酒店', time: '2024-01-13T15:00', date: '2024-01-13' },
+            { id: 11, amount: 98, category: 'food', payment: 'wechat', note: '早餐', time: '2024-01-13T08:00', date: '2024-01-13' },
+            { id: 12, amount: 500, category: 'transport', payment: 'alipay', note: '高铁票', time: '2024-01-12T07:00', date: '2024-01-12' }
+        ];
+
+        const categories = {
+            food: { name: '餐饮', icon: 'fa-utensils', color: 'bg-orange-100 text-orange-500', bgColor: 'bg-orange-500' },
+            transport: { name: '交通', icon: 'fa-bus', color: 'bg-blue-100 text-blue-500', bgColor: 'bg-blue-500' },
+            accommodation: { name: '住宿', icon: 'fa-bed', color: 'bg-purple-100 text-purple-500', bgColor: 'bg-purple-500' },
+            attraction: { name: '景点', icon: 'fa-ticket-alt', color: 'bg-green-100 text-green-500', bgColor: 'bg-green-500' },
+            shopping: { name: '购物', icon: 'fa-shopping-bag', color: 'bg-pink-100 text-pink-500', bgColor: 'bg-pink-500' },
+            other: { name: '其他', icon: 'fa-ellipsis-h', color: 'bg-gray-100 text-gray-500', bgColor: 'bg-gray-500' }
+        };
+
+        const payments = {
+            alipay: { name: '支付宝', icon: 'fab fa-alipay', color: 'text-blue-500' },
+            wechat: { name: '微信支付', icon: 'fab fa-weixin', color: 'text-green-500' },
+            cash: { name: '现金', icon: 'fas fa-money-bill-wave', color: 'text-green-600' },
+            card: { name: '银行卡', icon: 'fas fa-credit-card', color: 'text-purple-500' }
+        };
+
+        // 预算设置
+        const budget = {
+            total: 6000,
+            categories: {
+                food: { limit: 1500, used: 0 },
+                transport: { limit: 1000, used: 0 },
+                accommodation: { limit: 2000, used: 0 },
+                attraction: { limit: 800, used: 0 },
+                shopping: { limit: 500, used: 0 },
+                other: { limit: 200, used: 0 }
+            }
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            renderRecentExpenses();
+            renderExpenseList();
+            renderCategoryStats();
+            renderCategoryBudgets();
+            renderDailyStats();
+            renderAISuggestions();
+            renderOptimizationTips();
+            updateBudgetRing();
+            
+            // 设置默认时间
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('expense-time').value = now.toISOString().slice(0, 16);
+        });
+
+        // 切换标签页
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                item.classList.add('text-gray-600');
+            });
+            
+            document.getElementById(`content-${tabName}`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.remove('text-gray-600');
+        }
+
+        // 初始化图表
+        function initCharts() {
+            // 消费分布饼图
+            const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+            const categoryData = calculateCategoryData();
+            
+            new Chart(expenseCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(categoryData).map(k => categories[k].name),
+                    datasets: [{
+                        data: Object.values(categoryData),
+                        backgroundColor: ['#f97316', '#3b82f6', '#a855f7', '#22c55e', '#ec4899', '#6b7280'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 20, usePointStyle: true }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // 支付方式饼图
+            const paymentCtx = document.getElementById('paymentChart').getContext('2d');
+            const paymentData = calculatePaymentData();
+            
+            new Chart(paymentCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(paymentData).map(k => payments[k].name),
+                    datasets: [{
+                        data: Object.values(paymentData),
+                        backgroundColor: ['#1677ff', '#52c41a', '#faad14', '#722ed1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 10, usePointStyle: true, font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+
+            // 消费趋势图
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            const trendData = calculateTrendData();
+            
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: trendData.labels,
+                    datasets: [{
+                        label: '消费金额',
+                        data: trendData.data,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 类别对比柱状图
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            
+            new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categoryData).map(k => categories[k].name),
+                    datasets: [{
+                        label: '消费金额',
+                        data: Object.values(categoryData),
+                        backgroundColor: ['#f97316', '#3b82f6', '#a855f7', '#22c55e', '#ec4899', '#6b7280'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // 计算分类数据
+        function calculateCategoryData() {
+            const data = {};
+            expenses.forEach(e => {
+                data[e.category] = (data[e.category] || 0) + e.amount;
+            });
+            return data;
+        }
+
+        // 计算支付方式数据
+        function calculatePaymentData() {
+            const data = {};
+            expenses.forEach(e => {
+                data[e.payment] = (data[e.payment] || 0) + e.amount;
+            });
+            return data;
+        }
+
+        // 计算趋势数据
+        function calculateTrendData() {
+            const dateMap = {};
+            expenses.forEach(e => {
+                const date = e.date.slice(5);
+                dateMap[date] = (dateMap[date] || 0) + e.amount;
+            });
+            const sortedDates = Object.keys(dateMap).sort();
+            return {
+                labels: sortedDates,
+                data: sortedDates.map(d => dateMap[d])
+            };
+        }
+
+        // 渲染最近消费
+        function renderRecentExpenses() {
+            const container = document.getElementById('recent-expenses');
+            const recent = expenses.slice(0, 5);
+            
+            container.innerHTML = recent.map(expense => `
+                <div class="expense-item flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="category-icon ${categories[expense.category].color}">
+                            <i class="fas ${categories[expense.category].icon}"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800">${expense.note || categories[expense.category].name}</p>
+                            <p class="text-xs text-gray-500">${expense.time.slice(11, 16)} · ${payments[expense.payment].name}</p>
+                        </div>
+                    </div>
+                    <span class="font-bold text-gray-800">-¥${expense.amount}</span>
+                </div>
+            `).join('');
+        }
+
+        // 渲染消费列表
+        function renderExpenseList() {
+            const container = document.getElementById('expense-list');
+            const categoryFilter = document.getElementById('filter-category').value;
+            const dateFilter = document.getElementById('filter-date').value;
+            const paymentFilter = document.getElementById('filter-payment').value;
+            
+            let filtered = expenses.filter(e => {
+                if (categoryFilter && e.category !== categoryFilter) return false;
+                if (paymentFilter && e.payment !== paymentFilter) return false;
+                if (dateFilter) {
+                    const expenseDate = new Date(e.date);
+                    const today = new Date();
+                    if (dateFilter === 'today' && expenseDate.toDateString() !== today.toDateString()) return false;
+                }
+                return true;
+            });
+            
+            // 按日期分组
+            const grouped = {};
+            filtered.forEach(e => {
+                if (!grouped[e.date]) grouped[e.date] = [];
+                grouped[e.date].push(e);
+            });
+            
+            const sortedDates = Object.keys(grouped).sort().reverse();
+            
+            container.innerHTML = sortedDates.map(date => {
+                const dayExpenses = grouped[date];
+                const dayTotal = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+                const dateObj = new Date(date);
+                const dateStr = `${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+                const weekDay = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][dateObj.getDay()];
+                
+                return `
+                    <div class="slide-in">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-bold text-gray-800">${dateStr}</span>
+                                <span class="text-xs text-gray-500">${weekDay}</span>
+                            </div>
+                            <span class="font-bold text-gray-800">¥${dayTotal}</span>
+                        </div>
+                        <div class="space-y-2">
+                            ${dayExpenses.map(expense => `
+                                <div class="expense-item flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="category-icon ${categories[expense.category].color}">
+                                            <i class="fas ${categories[expense.category].icon}"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-gray-800">${expense.note || categories[expense.category].name}</p>
+                                            <div class="flex items-center space-x-2 text-xs text-gray-500">
+                                                <span>${expense.time.slice(11, 16)}</span>
+                                                <span>·</span>
+                                                <i class="${payments[expense.payment].icon} ${payments[expense.payment].color}"></i>
+                                                <span>${payments[expense.payment].name}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="font-bold text-lg text-gray-800">-¥${expense.amount}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div class="text-center py-8 text-gray-500">暂无消费记录</div>';
+        }
+
+        // 渲染分类统计
+        function renderCategoryStats() {
+            const container = document.getElementById('category-stats');
+            const categoryData = calculateCategoryData();
+            const total = Object.values(categoryData).reduce((sum, v) => sum + v, 0);
+            
+            container.innerHTML = Object.entries(categoryData).map(([cat, amount]) => {
+                const percentage = ((amount / total) * 100).toFixed(1);
+                return `
+                    <div class="flex items-center space-x-3">
+                        <div class="category-icon ${categories[cat].color} flex-shrink-0">
+                            <i class="fas ${categories[cat].icon}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">${categories[cat].name}</span>
+                                <span class="text-sm font-bold text-gray-800">¥${amount}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="${categories[cat].bgColor} h-2 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500 w-10 text-right">${percentage}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 渲染分类预算
+        function renderCategoryBudgets() {
+            const container = document.getElementById('category-budgets');
+            const categoryData = calculateCategoryData();
+            
+            container.innerHTML = Object.entries(budget.categories).map(([cat, data]) => {
+                const used = categoryData[cat] || 0;
+                const percentage = Math.min((used / data.limit) * 100, 100);
+                const isWarning = percentage >= 80;
+                const isOver = percentage >= 100;
+                
+                return `
+                    <div class="${isOver ? 'budget-warning' : ''}">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 ${categories[cat].color} rounded-lg flex items-center justify-center">
+                                    <i class="fas ${categories[cat].icon} text-sm"></i>
+                                </div>
+                                <span class="font-medium text-gray-700">${categories[cat].name}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-bold ${isOver ? 'text-red-500' : 'text-gray-800'}">¥${used}</span>
+                                <span class="text-xs text-gray-500">/ ¥${data.limit}</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="h-3 rounded-full transition-all duration-500 ${isOver ? 'bg-red-500' : isWarning ? 'bg-yellow-500' : categories[cat].bgColor}" 
+                                style="width: ${percentage}%"></div>
+                        </div>
+                        <p class="text-xs mt-1 ${isOver ? 'text-red-500' : isWarning ? 'text-yellow-600' : 'text-gray-500'}">
+                            ${isOver ? '已超支！' : isWarning ? '即将超支' : `剩余 ¥${data.limit - used}`}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 渲染每日统计
+        function renderDailyStats() {
+            const container = document.getElementById('daily-stats');
+            const grouped = {};
+            
+            expenses.forEach(e => {
+                if (!grouped[e.date]) {
+                    grouped[e.date] = { food: 0, transport: 0, accommodation: 0, attraction: 0, shopping: 0, other: 0 };
+                }
+                grouped[e.date][e.category] += e.amount;
+            });
+            
+            const sortedDates = Object.keys(grouped).sort().reverse();
+            
+            container.innerHTML = sortedDates.map(date => {
+                const data = grouped[date];
+                const total = Object.values(data).reduce((sum, v) => sum + v, 0);
+                const dateObj = new Date(date);
+                const dateStr = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
+                
+                return `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 font-medium">${dateStr}</td>
+                        <td class="py-3">¥${data.food}</td>
+                        <td class="py-3">¥${data.transport}</td>
+                        <td class="py-3">¥${data.accommodation}</td>
+                        <td class="py-3">¥${data.attraction}</td>
+                        <td class="py-3">¥${data.shopping}</td>
+                        <td class="py-3 text-right font-bold">¥${total}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 渲染AI建议
+        function renderAISuggestions() {
+            const container = document.getElementById('ai-suggestions');
+            const categoryData = calculateCategoryData();
+            const total = Object.values(categoryData).reduce((sum, v) => sum + v, 0);
+            
+            const suggestions = [
+                {
+                    icon: 'fa-utensils',
+                    color: 'bg-orange-100 text-orange-500',
+                    title: '餐饮消费分析',
+                    content: `您在餐饮方面花费了¥${categoryData.food || 0}，占总消费的${((categoryData.food || 0) / total * 100).toFixed(0)}%。建议尝试当地小吃街，既省钱又能体验地道美食。`
+                },
+                {
+                    icon: 'fa-bus',
+                    color: 'bg-blue-100 text-blue-500',
+                    title: '交通出行建议',
+                    content: '您的交通费用控制良好。建议使用地铁一日票，可节省约30%的交通费用。'
+                },
+                {
+                    icon: 'fa-piggy-bank',
+                    color: 'bg-green-100 text-green-500',
+                    title: '省钱小贴士',
+                    content: '根据您的行程，预计还可节省¥500。建议提前预订景点门票，通常有8-9折优惠。'
+                }
+            ];
+            
+            container.innerHTML = suggestions.map((s, i) => `
+                <div class="suggestion-card p-4 bg-gray-50 rounded-xl" style="animation-delay: ${i * 0.1}s">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 ${s.color} rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas ${s.icon}"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-gray-800 mb-1">${s.title}</h5>
+                            <p class="text-sm text-gray-600 leading-relaxed">${s.content}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染优化建议
+        function renderOptimizationTips() {
+            const container = document.getElementById('optimization-tips');
+            const tips = [
+                { icon: 'fa-hotel', color: 'text-purple-500', bg: 'bg-purple-50', title: '住宿优化', desc: '选择地铁沿线酒店，可节省交通费' },
+                { icon: 'fa-ticket-alt', color: 'text-green-500', bg: 'bg-green-50', title: '门票攻略', desc: '购买联票套餐，平均节省20%' },
+                { icon: 'fa-utensils', color: 'text-orange-500', bg: 'bg-orange-50', title: '美食推荐', desc: '避开景区餐厅， locals推荐更实惠' },
+                { icon: 'fa-shopping-bag', color: 'text-pink-500', bg: 'bg-pink-50', title: '购物提醒', desc: '特产建议在超市购买，价格更透明' }
+            ];
+            
+            container.innerHTML = tips.map(tip => `
+                <div class="suggestion-card p-4 ${tip.bg} rounded-xl">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <i class="fas ${tip.icon} ${tip.color} text-lg"></i>
+                        <h5 class="font-bold text-gray-800">${tip.title}</h5>
+                    </div>
+                    <p class="text-sm text-gray-600">${tip.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        // 更新预算环形图
+        function updateBudgetRing() {
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const percentage = total / budget.total;
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference * (1 - percentage);
+            
+            const ring = document.getElementById('budget-ring');
+            if (ring) {
+                ring.style.strokeDashoffset = offset;
+                
+                if (percentage >= 1) {
+                    ring.style.stroke = '#ef4444';
+                } else if (percentage >= 0.8) {
+                    ring.style.stroke = '#f59e0b';
+                }
+            }
+        }
+
+        // 打开弹窗
+        function openAddModal() {
+            document.getElementById('add-modal').classList.add('show');
+        }
+
+        function openCameraModal() {
+            document.getElementById('camera-modal').classList.add('show');
+        }
+
+        function openVoiceModal() {
+            document.getElementById('voice-modal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // 保存消费
+        function saveExpense() {
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            const category = document.querySelector('input[name="category"]:checked').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            const note = document.getElementById('expense-note').value;
+            const time = document.getElementById('expense-time').value;
+            
+            if (!amount || amount <= 0) {
+                alert('请输入有效金额');
+                return;
+            }
+            
+            const newExpense = {
+                id: Date.now(),
+                amount: amount,
+                category: category,
+                payment: payment,
+                note: note,
+                time: time,
+                date: time.slice(0, 10)
+            };
+            
+            expenses.unshift(newExpense);
+            
+            // 更新UI
+            renderRecentExpenses();
+            renderExpenseList();
+            renderCategoryStats();
+            renderCategoryBudgets();
+            renderDailyStats();
+            updateBudgetRing();
+            
+            // 更新统计数据
+            updateStats();
+            
+            closeModal('add-modal');
+            
+            // 重置表单
+            document.getElementById('expense-form').reset();
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('expense-time').value = now.toISOString().slice(0, 16);
+        }
+
+        // 更新统计数据
+        function updateStats() {
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const remaining = budget.total - total;
+            
+            document.getElementById('total-expense').textContent = total.toLocaleString();
+            document.getElementById('budget-remaining').textContent = remaining.toLocaleString();
+            document.getElementById('expense-count').textContent = expenses.length;
+        }
+
+        // 模拟AI识别
+        function simulateAIRecognition() {
+            closeModal('camera-modal');
+            
+            // 模拟识别结果
+            setTimeout(() => {
+                document.getElementById('expense-amount').value = '168.00';
+                document.querySelector('input[name="category"][value="food"]').checked = true;
+                document.getElementById('expense-note').value = '南翔馒头店';
+                openAddModal();
+            }, 500);
+        }
+
+        // 模拟语音输入
+        function simulateVoiceInput() {
+            closeModal('voice-modal');
+            
+            setTimeout(() => {
+                document.getElementById('expense-amount').value = '35.00';
+                document.querySelector('input[name="category"][value="transport"]').checked = true;
+                document.getElementById('expense-note').value = '打车去豫园';
+                openAddModal();
+            }, 500);
+        }
+
+        // 重置筛选
+        function resetFilters() {
+            document.getElementById('filter-category').value = '';
+            document.getElementById('filter-date').value = '';
+            document.getElementById('filter-payment').value = '';
+            renderExpenseList();
+        }
+
+        // 监听筛选变化
+        document.getElementById('filter-category')?.addEventListener('change', renderExpenseList);
+        document.getElementById('filter-date')?.addEventListener('change', renderExpenseList);
+        document.getElementById('filter-payment')?.addEventListener('change', renderExpenseList);
+
+        // 点击模态框外部关闭
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

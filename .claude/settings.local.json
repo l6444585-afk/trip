@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker-compose ps:*)",
+      "Bash(node --version && npm --version)",
+      "Bash(cd .. && ls -la start*.sh start*.bat)",
+      "Bash(node launcher-server.js)",
+      "Bash(node travel-planner/launcher-server.js)",
+      "Bash(sleep 3 && curl -s http://localhost:8000/docs | head -20)",
+      "Bash(curl -s http://localhost:3000 | head -20)",
+      "Bash(netstat -ano | findstr \":8000\")",
+      "Bash(netstat -ano | findstr \":3000\")",
+      "Bash(curl -s http://localhost:8000/health)",
+      "Bash(curl -s http://localhost:3000 | grep -o '<title>.*</title>')",
+      "Bash(tasklist | findstr \"node\")",
+      "Bash(taskkill /F /PID 18236 /PID 17104 /PID 21560 /PID 16708 /PID 17292)",
+      "Bash(taskkill /F /PID 18236)",
+      "Bash(taskkill //F //PID 18236)",
+      "Bash(taskkill //F //PID 17104 //PID 21560 //PID 16708 //PID 17292)",
+      "WebSearch",
+      "Bash(cd \"D:\\\\Trae\\\\trip\" && ls -la travel-planner*)",
+      "Bash(cd \"D:\\\\Trae\\\\trip\" && dir travel-planner)",
+      "Read(//d D:/Trae/**)",
+      "Bash(dir)",
+      "Bash(python -c \"\nimport shutil\nfrom datetime import datetime\nimport os\n\nsource = r'D:\\\\Trae\\\\trip\\\\travel-planner'\ntimestamp = datetime.now\\(\\).strftime\\('%Y%m%d_%H%M%S'\\)\nbackup = rf'D:\\\\Trae\\\\trip\\\\travel-planner-backup-{timestamp}'\n\nprint\\(f'Creating backup: {backup}'\\)\nshutil.copytree\\(source, backup\\)\nprint\\('Backup completed successfully!'\\)\nprint\\(f'Backup location: {backup}'\\)\n\")",
+      "Bash(git -C \"D:/Trae/trip\" init)",
+      "Bash(python3 -c \"\nimport os\nos.chdir\\('D:\\\\\\\\Trae\\\\\\\\trip'\\)\nfiles = os.listdir\\('.'\\)\nprint\\('Current files:', files\\)\n\")"
+    ]
+  }
+}
