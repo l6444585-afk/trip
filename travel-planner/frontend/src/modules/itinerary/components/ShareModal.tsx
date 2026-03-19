@@ -253,7 +253,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     <Modal
       title={
         <Space>
-          <ShareAltOutlined style={{ color: '#667eea' }} />
+          <ShareAltOutlined style={{ color: '#1A936F' }} />
           <span>分享行程</span>
         </Space>
       }

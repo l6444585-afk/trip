@@ -5,10 +5,121 @@ API 响应缓存模块
 import hashlib
 import json
 import time
+import logging
 from typing import Optional, Any, Dict, Callable
 from functools import wraps
 from threading import Lock
 from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
+
+try:
+    import redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    logger.warning("Redis module not available, using memory cache only")
+
+
+class RedisClient:
+    def __init__(self, url: str = "redis://localhost:6379/0"):
+        self._client = None
+        self._enabled = False
+        if REDIS_AVAILABLE:
+            try:
+                self._client = redis.from_url(url, decode_responses=True)
+                self._client.ping()
+                self._enabled = True
+                logger.info("Redis connection established")
+            except Exception as e:
+                logger.warning(f"Redis connection failed: {e}, using memory cache only")
+                self._client = None
+    
+    def get(self, key: str) -> Optional[Any]:
+        if not self._enabled or not self._client:
+            return None
+        try:
+            value = self._client.get(key)
+            if value:
+                return json.loads(value)
+            return None
+        except Exception as e:
+            logger.error(f"Redis get error: {e}")
+            return None
+    
+    def set(self, key: str, value: Any, ttl: int = 300) -> bool:
+        if not self._enabled or not self._client:
+            return False
+        try:
+            self._client.setex(key, ttl, json.dumps(value, default=str))
+            return True
+        except Exception as e:
+            logger.error(f"Redis set error: {e}")
+            return False
+    
+    def delete(self, key: str) -> bool:
+        if not self._enabled or not self._client:
+            return False
+        try:
+            self._client.delete(key)
+            return True
+        except Exception as e:
+            logger.error(f"Redis delete error: {e}")
+            return False
+    
+    def is_enabled(self) -> bool:
+        return self._enabled
+    
+    def register_script(self, script: str):
+        if not self._enabled or not self._client:
+            return None
+        try:
+            return self._client.register_script(script)
+        except Exception as e:
+            logger.error(f"Redis register_script error: {e}")
+            return None
+
+    def eval_async(self, script, keys: list = None, args: list = None):
+        if not self._enabled or not self._client:
+            return None
+        try:
+            return self._client.evalsha(script.sha, len(keys or []), *(keys or []), *(args or []))
+        except Exception as e:
+            logger.error(f"Redis eval_async error: {e}")
+            return None
+    
+    def eval_script(self, script, keys: list = None, args: list = None):
+        if not self._enabled or not self._client:
+            return None
+        try:
+            return self._client.eval(script, len(keys or []), *(keys or []), *(args or []))
+        except Exception as e:
+            logger.error(f"Redis eval error: {e}")
+            return None
+    
+    def incr(self, key: str) -> int:
+        if not self._enabled or not self._client:
+            return 0
+        try:
+            return self._client.incr(key)
+        except Exception as e:
+            logger.error(f"Redis incr error: {e}")
+            return 0
+    
+    def decr(self, key: str) -> int:
+        if not self._enabled or not self._client:
+            return 0
+        try:
+            return self._client.decr(key)
+        except Exception as e:
+            logger.error(f"Redis decr error: {e}")
+            return 0
+    
+    def get_client(self):
+        return self._client
+
+
+redis_client = RedisClient()
 
 
 @dataclass

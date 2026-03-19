@@ -372,7 +372,7 @@ const AITravelPlanner = () => {
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
             {!isUser && (
               <Avatar 
-                style={{ backgroundColor: '#667eea', flexShrink: 0 }}
+                style={{ backgroundColor: '#1A936F', flexShrink: 0 }}
                 icon={<RobotOutlined />}
               />
             )}
@@ -381,7 +381,7 @@ const AITravelPlanner = () => {
                 size="small"
                 style={{
                   borderRadius: 12,
-                  background: isUser ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : '#fff',
+                  background: isUser ? 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)' : '#fff',
                   color: isUser ? '#fff' : '#1a1a1a',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                   border: 'none'
@@ -428,7 +428,7 @@ const AITravelPlanner = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <Title level={2} style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <RobotOutlined style={{ color: '#667eea' }} />
+              <RobotOutlined style={{ color: '#1A936F' }} />
               AI 智能规划
             </Title>
             <Paragraph style={{ color: '#8a8a8a', marginTop: 8, marginBottom: 0 }}>
@@ -447,7 +447,7 @@ const AITravelPlanner = () => {
                 type="primary"
                 icon={<ThunderboltOutlined />} 
                 onClick={() => setShowQuickPlan(true)}
-                style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}
+                style={{ background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)', border: 'none' }}
               >
                 快速规划
               </Button>
@@ -470,7 +470,7 @@ const AITravelPlanner = () => {
             }}>
               {chatMessages.length === 0 && (
                 <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                  <RobotOutlined style={{ fontSize: 64, color: '#667eea', marginBottom: 24 }} />
+                  <RobotOutlined style={{ fontSize: 64, color: '#1A936F', marginBottom: 24 }} />
                   <Title level={3} style={{ marginBottom: 16 }}>你好！我是江浙沪旅游规划专家 🌟</Title>
                   <Paragraph style={{ color: '#666', marginBottom: 32 }}>
                     我可以帮你规划江浙沪地区的完美旅程<br/>
@@ -529,9 +529,9 @@ const AITravelPlanner = () => {
               
               {(isChatting || isStreaming) && !streamingContent && (
                 <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-start' }}>
-                  <Avatar style={{ backgroundColor: '#667eea' }} icon={<RobotOutlined />} />
+                  <Avatar style={{ backgroundColor: '#1A936F' }} icon={<RobotOutlined />} />
                   <div style={{ marginLeft: 8, padding: '12px 16px', background: '#fff', borderRadius: 12 }}>
-                    <Spin indicator={<LoadingOutlined style={{ color: '#667eea' }} spin />} />
+                    <Spin indicator={<LoadingOutlined style={{ color: '#1A936F' }} spin />} />
                     <Text style={{ marginLeft: 8, color: '#8a8a8a' }}>AI正在思考...</Text>
                   </div>
                 </div>
@@ -578,7 +578,7 @@ const AITravelPlanner = () => {
                   disabled={isChatting || isStreaming || !userInput.trim()}
                   style={{ 
                     borderRadius: '0 8px 8px 0',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                     border: 'none'
                   }}
                 >
@@ -652,7 +652,7 @@ const AITravelPlanner = () => {
           <Card 
             title={
               <Space>
-                <SettingOutlined style={{ color: '#667eea' }} />
+                <SettingOutlined style={{ color: '#1A936F' }} />
                 <span>兴趣偏好</span>
               </Space>
             }
@@ -680,7 +680,7 @@ const AITravelPlanner = () => {
       <Modal
         title={
           <Space>
-            <ThunderboltOutlined style={{ color: '#667eea' }} />
+            <ThunderboltOutlined style={{ color: '#1A936F' }} />
             <span>快速规划</span>
           </Space>
         }
@@ -787,7 +787,7 @@ const AITravelPlanner = () => {
               size="large"
               icon={<RocketOutlined />}
               style={{ 
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                 border: 'none'
               }}
             >
@@ -832,7 +832,7 @@ const AITravelPlanner = () => {
             <Collapse defaultActiveKey={['0']}>
               {(generatedItinerary.itinerary || []).map((day, idx) => (
                 <Panel 
-                  header={<><Badge count={day.day || idx + 1} style={{ backgroundColor: '#667eea', marginRight: 8 }} /> {day.theme || `第${day.day || idx + 1}天`}</>}
+                  header={<><Badge count={day.day || idx + 1} style={{ backgroundColor: '#1A936F', marginRight: 8 }} /> {day.theme || `第${day.day || idx + 1}天`}</>}
                   key={idx}
                 >
                   <List

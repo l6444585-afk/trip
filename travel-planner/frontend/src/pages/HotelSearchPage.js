@@ -194,7 +194,7 @@ const HotelSearchPage = () => {
           style={{ 
             borderRadius: 16, 
             boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)'
           }}
           styles={{ body: { padding: '16px 24px' } }}
         >
@@ -300,7 +300,7 @@ const HotelSearchPage = () => {
         marginBottom: 16 
       }}>
         <Title level={4} style={{ margin: 0 }}>
-          <HomeOutlined style={{ marginRight: 8, color: '#667eea' }} />
+          <HomeOutlined style={{ marginRight: 8, color: '#1A936F' }} />
           {searchParams.city}酒店推荐
           <Text type="secondary" style={{ fontSize: 14, marginLeft: 8 }}>
             共 {hotels.length} 家酒店

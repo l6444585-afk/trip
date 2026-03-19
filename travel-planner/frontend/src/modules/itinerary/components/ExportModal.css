@@ -12,11 +12,11 @@
 
 /* 导出预览卡片 */
 .export-preview-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 32px rgba(26, 147, 111, 0.3);
 }
 
 .export-preview-header {
@@ -89,13 +89,13 @@
 }
 
 .export-options .ant-radio-button-wrapper:hover {
-  border-color: #667eea;
-  background: #f8f9ff;
+  border-color: #1A936F;
+  background: #f0f7f4;
 }
 
 .export-options .ant-radio-button-wrapper-checked {
-  border-color: #667eea;
-  background: #f0f3ff;
+  border-color: #1A936F;
+  background: #e8f5f0;
 }
 
 .export-options .ant-radio-button-wrapper-checked:hover {
@@ -208,7 +208,7 @@
 }
 
 .control-section-title .anticon {
-  color: #667eea;
+  color: #1A936F;
 }
 
 /* 控制按钮组 */
@@ -231,8 +231,8 @@
 }
 
 .control-section .ant-radio-button-wrapper-checked {
-  background: #667eea;
-  border-color: #667eea;
+  background: #1A936F;
+  border-color: #1A936F;
   color: white;
 }
 
@@ -281,15 +281,15 @@
 }
 
 .control-section .ant-slider-track {
-  background: #667eea;
+  background: #1A936F;
 }
 
 .control-section .ant-slider-handle {
-  border-color: #667eea;
+  border-color: #1A936F;
 }
 
 .control-section .ant-slider-handle:focus {
-  box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 0 5px rgba(26, 147, 111, 0.2);
 }
 
 /* 响应式布局 */

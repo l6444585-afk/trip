@@ -1,0 +1,618 @@
+.scenic-detail-page {
+  min-height: calc(100vh - 64px - 70px);
+  background: #F5F1ED;
+}
+
+.scenic-detail-loading,
+.scenic-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.scenic-detail-header {
+  background: white;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(26, 147, 111, 0.1);
+  position: sticky;
+  top: 64px;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.header-actions .ant-btn-primary {
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  border: none;
+}
+
+.header-actions .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #157a5a 0%, #0d3a4a 100%);
+}
+
+.scenic-detail-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.main-card {
+  border-radius: 16px;
+  border: 1px solid rgba(26, 147, 111, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.scenic-hero {
+  position: relative;
+  margin: -24px -24px 24px;
+}
+
+.scenic-gallery {
+  position: relative;
+}
+
+.scenic-gallery .scenic-image {
+  cursor: pointer;
+}
+
+.gallery-controls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.gallery-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  box-shadow: 0 4px 12px rgba(26, 147, 111, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  color: #1A936F;
+}
+
+.gallery-btn:hover {
+  background: white;
+  box-shadow: 0 6px 16px rgba(26, 147, 111, 0.3);
+  transform: scale(1.1);
+  color: #114B5F;
+}
+
+.gallery-btn.prev {
+  left: 16px;
+}
+
+.gallery-btn.next {
+  right: 16px;
+}
+
+.gallery-indicator {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(17, 75, 95, 0.8);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  backdrop-filter: blur(4px);
+}
+
+.scenic-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+}
+
+.scenic-badges {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.scenic-badges .ant-tag {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  backdrop-filter: blur(4px);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.scenic-info-section {
+  padding: 0;
+}
+
+.scenic-info-section h2 {
+  margin-bottom: 8px !important;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.scenic-meta {
+  margin-bottom: 16px;
+}
+
+.scenic-description {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.price-info {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(26, 147, 111, 0.08) 0%, rgba(17, 75, 95, 0.08) 100%);
+  border-radius: 12px;
+  display: inline-block;
+  border: 1px solid rgba(26, 147, 111, 0.15);
+}
+
+.scenic-tags-section,
+.scenic-suitable-section,
+.scenic-tips-section,
+.scenic-warnings-section {
+  margin-top: 24px;
+}
+
+.scenic-tags-section .ant-tag,
+.scenic-suitable-section .ant-tag {
+  border-radius: 12px;
+  padding: 4px 12px;
+}
+
+.scenic-tips-section {
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(26, 147, 111, 0.06) 0%, rgba(136, 212, 152, 0.06) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(26, 147, 111, 0.1);
+}
+
+.scenic-tips-section h4 {
+  color: #1A936F !important;
+}
+
+.scenic-warnings-section {
+  padding: 18px;
+  background: #fff2f0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 77, 79, 0.2);
+}
+
+.map-card {
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(26, 147, 111, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.map-card .ant-card-head {
+  border-bottom: 1px solid rgba(26, 147, 111, 0.1);
+}
+
+.map-container {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #f0f0f0;
+}
+
+.map-actions {
+  margin-top: 12px;
+}
+
+.map-actions .ant-btn-primary {
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  border: none;
+  height: 42px;
+  border-radius: 10px;
+}
+
+.map-actions .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #157a5a 0%, #0d3a4a 100%);
+}
+
+.platform-card {
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(26, 147, 111, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.platform-button {
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-radius: 10px;
+  height: 42px;
+}
+
+.platform-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.booking-card {
+  border-radius: 16px;
+  border: 1px solid rgba(26, 147, 111, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.booking-card .ant-btn-primary {
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  border: none;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.booking-card .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #157a5a 0%, #0d3a4a 100%);
+}
+
+.map-modal .ant-modal-body {
+  padding: 0;
+}
+
+.map-modal-content {
+  width: 100%;
+  height: 500px;
+}
+
+.ant-descriptions-bordered .ant-descriptions-item-label {
+  background: #FAF8F5;
+}
+
+@media (max-width: 992px) {
+  .scenic-detail-content {
+    padding: 16px;
+  }
+
+  .scenic-image {
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scenic-detail-header {
+    padding: 12px 16px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .scenic-hero {
+    margin: -16px -16px 16px;
+  }
+
+  .scenic-image {
+    height: 220px;
+  }
+
+  .scenic-info-section h2 {
+    font-size: 20px !important;
+  }
+
+  .gallery-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .gallery-indicator {
+    bottom: 12px;
+    right: 12px;
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-actions .ant-btn {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  .scenic-image {
+    height: 180px;
+  }
+
+  .platform-button {
+    padding: 10px 12px;
+  }
+}
+
+/* 增强图片画廊样式 */
+.scenic-gallery-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fullscreen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.fullscreen-header h3 {
+  color: white;
+  margin: 0;
+}
+
+.fullscreen-close {
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 0.2s ease;
+}
+
+.fullscreen-close:hover {
+  transform: scale(1.1);
+}
+
+.fullscreen-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 24px;
+}
+
+.fullscreen-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.fullscreen-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #1A936F;
+}
+
+.fullscreen-nav:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fullscreen-nav.prev {
+  left: 24px;
+}
+
+.fullscreen-nav.next {
+  right: 24px;
+}
+
+.fullscreen-footer {
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.fullscreen-thumb {
+  width: 60px;
+  height: 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  object-fit: cover;
+  border: 2px solid transparent;
+}
+
+.fullscreen-thumb:hover,
+.fullscreen-thumb.active {
+  opacity: 1;
+  border-color: white;
+}
+
+/* 图片缩略图画廊 */
+.scenic-thumbnails {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.scenic-thumbnails::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scenic-thumbnails::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.thumbnail-item {
+  flex-shrink: 0;
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.thumbnail-item:hover {
+  opacity: 0.9;
+}
+
+.thumbnail-item.active {
+  opacity: 1;
+  border-color: #1A936F;
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 图片加载动画 */
+.scenic-image-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.scenic-image-loading .ant-spin {
+  color: white;
+}
+
+/* 图片预览增强 */
+.ant-image-preview-mask {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.ant-image-preview-img {
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* 图片切换动画 */
+.scenic-gallery .ant-carousel .slick-slide {
+  overflow: hidden;
+}
+
+.scenic-gallery .ant-carousel .slick-active {
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 图片预览遮罩 */
+.preview-mask {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px 16px 0 0;
+  color: white;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scenic-image:hover .preview-mask {
+  opacity: 1;
+}
+
+.preview-mask span {
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* 全屏画廊响应式 */
+@media (max-width: 768px) {
+  .scenic-gallery-fullscreen {
+    padding: 0;
+  }
+
+  .fullscreen-header {
+    padding: 12px 16px;
+  }
+
+  .fullscreen-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .fullscreen-nav.prev {
+    left: 8px;
+  }
+
+  .fullscreen-nav.next {
+    right: 8px;
+  }
+
+  .fullscreen-thumb {
+    width: 50px;
+    height: 35px;
+  }
+}

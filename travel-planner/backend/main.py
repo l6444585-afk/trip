@@ -10,6 +10,7 @@ from datetime import datetime, date, timedelta
 from contextlib import asynccontextmanager
 import os
 import time
+from pathlib import Path
 from collections import defaultdict
 from threading import Lock
 from dotenv import load_dotenv
@@ -43,12 +44,14 @@ from routes.weather_routes import router as weather_router
 from routes.ticket_routes import router as ticket_router
 from routes.hotel_booking_routes import router as hotel_booking_router
 from routes.share_routes import router as share_router
+from routes.scenic_routes import router as scenic_router
 from itinerary_service import ItineraryPlanningService
 from data_importer import DataImporter, export_to_excel, create_template_excel
 from restaurant_recommendation_service import RestaurantRecommendationService
 from transport_connection_service import TransportConnectionService
 from ai_travel_service import ai_travel_service
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
@@ -88,9 +91,12 @@ async def lifespan(app: FastAPI):
     create_demo_user()
     from database import SessionLocal
     from admin_models import init_admin_data
+    from data.scenic_data import init_scenic_data
     db = SessionLocal()
     try:
         init_admin_data(db)
+        print("🏞️ 初始化景区数据...")
+        init_scenic_data(db)
     finally:
         db.close()
     yield
@@ -175,6 +181,9 @@ app.add_middleware(
     allow_headers=settings.CORS_ALLOW_HEADERS,
 )
 
+BASE_DIR = Path(__file__).resolve().parent
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+
 app.include_router(rule_router)
 app.include_router(recommendation_router)
 app.include_router(hotel_router)
@@ -183,6 +192,7 @@ app.include_router(weather_router)
 app.include_router(ticket_router)
 app.include_router(hotel_booking_router)
 app.include_router(share_router)
+app.include_router(scenic_router)
 
 glm_service = GLMService()
 

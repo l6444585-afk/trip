@@ -45,11 +45,11 @@ interface ExportModalProps {
 type ExportFormat = 'html' | 'excel' | 'image' | 'calendar' | 'txt';
 type ImageTemplate = 'classic' | 'poster' | 'minimal' | 'journey';
 type ImageSize = 'square' | 'portrait' | 'landscape' | 'story';
-type ImageTheme = 'purple' | 'blue' | 'green' | 'orange' | 'dark' | 'red';
+type ImageTheme = 'jade' | 'blue' | 'green' | 'orange' | 'dark' | 'red';
 type ImageFormat = 'png' | 'jpg';
 
 const colorThemes = [
-  { key: 'purple' as ImageTheme, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', name: '紫韵' },
+  { key: 'jade' as ImageTheme, gradient: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)', name: '碧波' },
   { key: 'blue' as ImageTheme, gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', name: '蓝天' },
   { key: 'green' as ImageTheme, gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', name: '绿意' },
   { key: 'orange' as ImageTheme, gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', name: '暖阳' },
@@ -559,12 +559,12 @@ export const ExportModal: React.FC<ExportModalProps> = ({
         <span className="modal-title">
           {showImageExport ? (
             <>
-              <PictureOutlined style={{ color: '#667eea', marginRight: '8px' }} />
+              <PictureOutlined style={{ color: '#1A936F', marginRight: '8px' }} />
               导出为图片
             </>
           ) : (
             <>
-              <DownloadOutlined style={{ color: '#667eea', marginRight: '8px' }} />
+              <DownloadOutlined style={{ color: '#1A936F', marginRight: '8px' }} />
               导出行程
             </>
           )}

@@ -5,7 +5,7 @@
   position: absolute;
   top: -40px;
   left: 0;
-  background: #667eea;
+  background: #1A936F;
   color: #fff;
   padding: 8px 16px;
   text-decoration: none;
@@ -32,18 +32,18 @@
 
 /* 焦点可见性 */
 *:focus-visible {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
 /* 焦点样式 */
 .focus-ring {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
 .focus-ring:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .focus-indicator:focus-within::after {
-  border-color: #667eea;
+  border-color: #1A936F;
 }
 
 /* 键盘导航 */
@@ -72,7 +72,7 @@
 }
 
 .keyboard-nav:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .link-accessible:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -158,8 +158,8 @@
 
 .input-accessible:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1A936F;
+  box-shadow: 0 0 0 3px rgba(26, 147, 111, 0.1);
 }
 
 .input-accessible[aria-invalid="true"] {
@@ -254,13 +254,13 @@
 }
 
 .checkbox-accessible input[type="checkbox"]:focus + .checkbox-accessible-indicator {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1A936F;
+  box-shadow: 0 0 0 3px rgba(26, 147, 111, 0.1);
 }
 
 .checkbox-accessible input[type="checkbox"]:checked + .checkbox-accessible-indicator {
-  background: #667eea;
-  border-color: #667eea;
+  background: #1A936F;
+  border-color: #1A936F;
 }
 
 .checkbox-accessible input[type="checkbox"]:checked + .checkbox-accessible-indicator::after {
@@ -297,19 +297,19 @@
 }
 
 .radio-accessible input[type="radio"]:focus + .radio-accessible-indicator {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1A936F;
+  box-shadow: 0 0 0 3px rgba(26, 147, 111, 0.1);
 }
 
 .radio-accessible input[type="radio"]:checked + .radio-accessible-indicator {
-  border-color: #667eea;
+  border-color: #1A936F;
 }
 
 .radio-accessible input[type="radio"]:checked + .radio-accessible-indicator::after {
   content: '';
   width: 10px;
   height: 10px;
-  background: #667eea;
+  background: #1A936F;
   border-radius: 50%;
 }
 
@@ -334,8 +334,8 @@
 
 .select-accessible select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1A936F;
+  box-shadow: 0 0 0 3px rgba(26, 147, 111, 0.1);
 }
 
 .select-accessible::after {
@@ -370,7 +370,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #667eea;
+  background: #1A936F;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -383,7 +383,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #667eea;
+  background: #1A936F;
   cursor: pointer;
   border: none;
   transition: all 0.2s ease;
@@ -432,11 +432,11 @@
 }
 
 .switch-accessible input:focus + .switch-accessible-slider {
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(26, 147, 111, 0.1);
 }
 
 .switch-accessible input:checked + .switch-accessible-slider {
-  background-color: #667eea;
+  background-color: #1A936F;
 }
 
 .switch-accessible input:checked + .switch-accessible-slider::before {
@@ -454,7 +454,7 @@
 
 .progress-accessible-bar {
   height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg, #1A936F 0%, #114B5F 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -471,7 +471,7 @@
   font-weight: 600;
   line-height: 1;
   color: #fff;
-  background: #667eea;
+  background: #1A936F;
   border-radius: 10px;
 }
 
@@ -499,7 +499,7 @@
 }
 
 .card-accessible:focus-within {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -553,7 +553,7 @@
 }
 
 .modal-accessible-close:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -667,13 +667,13 @@
 }
 
 .tabs-accessible-button:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: -2px;
 }
 
 .tabs-accessible-button[aria-selected="true"] {
-  color: #667eea;
-  border-bottom: 2px solid #667eea;
+  color: #1A936F;
+  border-bottom: 2px solid #1A936F;
 }
 
 /* 折叠面板无障碍 */
@@ -711,7 +711,7 @@
 }
 
 .accordion-accessible-header:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: -2px;
 }
 
@@ -773,7 +773,7 @@
 }
 
 .list-accessible-item:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: -2px;
 }
 
@@ -805,16 +805,16 @@
 
 .nav-accessible-link:hover {
   background: #f5f7fa;
-  color: #667eea;
+  color: #1A936F;
 }
 
 .nav-accessible-link:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
 .nav-accessible-link[aria-current="page"] {
-  background: #667eea;
+  background: #1A936F;
   color: #fff;
 }
 
@@ -835,7 +835,7 @@
 }
 
 .breadcrumb-accessible-link {
-  color: #667eea;
+  color: #1A936F;
   text-decoration: none;
   transition: all 0.2s ease;
 }
@@ -845,7 +845,7 @@
 }
 
 .breadcrumb-accessible-link:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -870,8 +870,8 @@
 
 .search-accessible input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1A936F;
+  box-shadow: 0 0 0 3px rgba(26, 147, 111, 0.1);
 }
 
 .search-accessible-icon {
@@ -894,7 +894,7 @@
   padding: 16px;
   max-width: 400px;
   z-index: 1000;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #1A936F;
 }
 
 .notification-accessible[role="alert"] {
@@ -925,7 +925,7 @@
 }
 
 .notification-accessible-close:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -940,7 +940,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid #e8e8e8;
-  border-top-color: #667eea;
+  border-top-color: #1A936F;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button, Space, Typography, Tag, Divider, Avatar, Rate } from 'antd';
-import { EnvironmentOutlined, ClockOutlined, DollarOutlined, StarOutlined, HeartOutlined, ShareAltOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Button, Space, Typography, Tag, Divider, Avatar, Rate, Tooltip, message } from 'antd';
+import {
+  EnvironmentOutlined,
+  ClockOutlined,
+  DollarOutlined,
+  StarOutlined,
+  HeartOutlined,
+  ShareAltOutlined,
+  InfoCircleOutlined,
+  CheckCircleOutlined,
+  CameraOutlined
+} from '@ant-design/icons';
 import ImageGenerator from './ImageGenerator';
 
 const { Title, Text, Paragraph } = Typography;
 
-const AttractionCard = ({ attraction, onFavorite, onShare }) => {
+const AttractionCard = ({ attraction, onFavorite, onShare, onAddToItinerary }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [showImageGenerator, setShowImageGenerator] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const getCategoryColor = (category) => {
     const colors = {
@@ -39,41 +51,60 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
     setGeneratedImage(imageUrl);
   };
 
+  const handleAddToItinerary = () => {
+    if (onAddToItinerary) {
+      onAddToItinerary(attraction);
+    }
+    message.success(`已将「${attraction.name}」添加到行程规划`);
+  };
+
   return (
     <Card
-      className="ink-card hover-lift"
-      style={{ 
+      className={`ink-card hover-lift ${isHovered ? 'hovered' : ''}`}
+      style={{
         borderRadius: 20,
         height: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'
       }}
       styles={{ body: { padding: 0 } }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       cover={
-        <div style={{ 
-          height: 240,
-          background: 'linear-gradient(135deg, #2E8B57 0%, #4CAF50 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative'
-        }}>
-          {generatedImage ? (
-            <img
-              src={generatedImage}
-              alt={attraction.name}
-              style={{ 
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-            />
-          ) : (
-            <div style={{ 
+        <div
+          style={{
+            height: 240,
+            background: generatedImage
+              ? 'transparent'
+              : 'linear-gradient(135deg, #2E8B57 0%, #4CAF50 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          {!imageLoaded && !generatedImage && (
+            <div style={{
               fontSize: 80,
               opacity: 0.9
             }}>
               🏞️
             </div>
+          )}
+          {generatedImage && (
+            <img
+              src={generatedImage}
+              alt={attraction.name}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: isHovered ? 1 : 0.9,
+                transition: 'opacity 0.3s ease'
+              }}
+              onLoad={() => setImageLoaded(true)}
+            />
           )}
           <div style={{
             position: 'absolute',
@@ -108,28 +139,61 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
               精选
             </div>
           )}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: '40px 16px 12px',
+              background: 'linear-gradient(transparent, rgba(0,0,0,0.5))',
+              opacity: isHovered ? 1 : 0,
+              transition: 'opacity 0.3s ease'
+            }}
+          >
+            <Space size="small">
+              <Tooltip title="收藏">
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<HeartOutlined />}
+                  onClick={handleFavorite}
+                  style={{ color: isFavorite ? '#E91E63' : '#fff' }}
+                />
+              </Tooltip>
+              <Tooltip title="分享">
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<ShareAltOutlined />}
+                  onClick={handleShare}
+                  style={{ color: '#fff' }}
+                />
+              </Tooltip>
+            </Space>
+          </div>
         </div>
       }
     >
       <div style={{ padding: '20px 24px' }}>
-        <div style={{ 
+        <div style={{
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
           marginBottom: 12
         }}>
           <div style={{ flex: 1 }}>
-            <Title level={5} style={{ 
-              marginBottom: 8, 
+            <Title level={5} style={{
+              marginBottom: 8,
               color: '#1a1a1a',
               fontSize: 18
             }}>
               {attraction.name}
             </Title>
             <Space size={[4, 4]} wrap>
-              <Tag 
+              <Tag
                 color={getCategoryColor(attraction.category)}
-                style={{ 
+                style={{
                   borderRadius: '12px',
                   padding: '4px 12px',
                   fontSize: 12,
@@ -139,8 +203,8 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
                 {attraction.category}
               </Tag>
               {attraction.subcategory && (
-                <Tag 
-                  style={{ 
+                <Tag
+                  style={{
                     borderRadius: '12px',
                     padding: '4px 12px',
                     fontSize: 12,
@@ -153,20 +217,11 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
               )}
             </Space>
           </div>
-          <Button
-            type="text"
-            icon={<HeartOutlined />}
-            onClick={handleFavorite}
-            style={{ 
-              color: isFavorite ? '#E91E63' : '#8a8a8a',
-              fontSize: 20
-            }}
-          />
         </div>
 
-        <Paragraph 
-          style={{ 
-            color: '#5a5a5a', 
+        <Paragraph
+          style={{
+            color: '#5a5a5a',
             fontSize: 14,
             marginBottom: 16,
             display: '-webkit-box',
@@ -195,11 +250,11 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
             </div>
           )}
 
-          {attraction.ticket_price && (
+          {attraction.ticket_price !== undefined && attraction.ticket_price !== null && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <DollarOutlined style={{ color: '#2E8B57', fontSize: 14 }} />
               <Text style={{ color: '#5a5a5a', fontSize: 13 }}>
-                门票 ¥{attraction.ticket_price}
+                {attraction.ticket_price === 0 ? '免费' : `门票 ¥${attraction.ticket_price}`}
               </Text>
             </div>
           )}
@@ -219,6 +274,23 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
           )}
         </Space>
 
+        {attraction.tips && (
+          <div style={{
+            background: '#F5F5F5',
+            borderRadius: 8,
+            padding: '8px 12px',
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 8
+          }}>
+            <InfoCircleOutlined style={{ color: '#4A90A4', fontSize: 14, marginTop: 2 }} />
+            <Text style={{ color: '#5a5a5a', fontSize: 12 }}>
+              {attraction.tips}
+            </Text>
+          </div>
+        )}
+
         <Divider style={{ margin: '16px 0' }} />
 
         <Space size="small" style={{ width: '100%', justifyContent: 'space-between' }}>
@@ -230,18 +302,34 @@ const AttractionCard = ({ attraction, onFavorite, onShare }) => {
           >
             分享
           </Button>
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => setShowImageGenerator(!showImageGenerator)}
-            style={{ 
-              borderRadius: 8,
-              background: 'linear-gradient(135deg, #2E8B57 0%, #4CAF50 100%)',
-              border: 'none'
-            }}
-          >
-            {showImageGenerator ? '收起' : '生成图片'}
-          </Button>
+          <Space size="small">
+            <Button
+              type="primary"
+              size="small"
+              icon={<CameraOutlined />}
+              onClick={() => setShowImageGenerator(!showImageGenerator)}
+              style={{
+                borderRadius: 8,
+                background: 'linear-gradient(135deg, #2E8B57 0%, #4CAF50 100%)',
+                border: 'none'
+              }}
+            >
+              {showImageGenerator ? '收起' : '生成图片'}
+            </Button>
+            <Button
+              type="primary"
+              size="small"
+              icon={<CheckCircleOutlined />}
+              onClick={handleAddToItinerary}
+              style={{
+                borderRadius: 8,
+                background: 'linear-gradient(135deg, #4A90A4 0%, #2E8B57 100%)',
+                border: 'none'
+              }}
+            >
+              加入行程
+            </Button>
+          </Space>
         </Space>
 
         {showImageGenerator && (

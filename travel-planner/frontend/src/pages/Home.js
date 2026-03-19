@@ -289,7 +289,7 @@ const Home = () => {
 
   const features = [
     {
-      icon: <EnvironmentOutlined style={{ fontSize: 32, color: '#667eea' }} />,
+      icon: <EnvironmentOutlined style={{ fontSize: 32, color: '#1A936F' }} />,
       title: '智能推荐',
       description: 'GLM-4.7 推理引擎驱动 - 基于200K超长上下文窗口，结合实时联网数据，为您推荐最符合个人喜好的景点、美食和活动。模型的多语言理解能力确保推荐精准度。'
     },
@@ -304,7 +304,7 @@ const Home = () => {
       description: 'Claude Code式工作流 - 所有行程基于GLM-4.7生成，支持随时调整参数并一键重新规划。保留式思考模式确保修改历史完整，可随时回溯或微调。'
     },
     {
-      icon: <HeartOutlined style={{ fontSize: 32, color: '#764ba2' }} />,
+      icon: <HeartOutlined style={{ fontSize: 32, color: '#114B5F' }} />,
       title: '预算管理',
       description: '动态工具调用 - GLM-4.7的精准工具调用能力实时分析价格趋势，自动计算交通、住宿、餐饮成本，并提供预算预警和替代方案，确保您的行程在预算范围内。'
     }
@@ -473,7 +473,7 @@ const Home = () => {
           to { opacity: 1; transform: translateY(0); }
         }
         .destination-name-gradient {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+          background: linear-gradient(135deg, #1A936F 0%, #114B5F 50%, #5B9A8B 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -597,7 +597,7 @@ const Home = () => {
                     fontSize: 14,
                     fontWeight: 500,
                     transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                     border: 'none'
                   }}
                   onMouseEnter={(e) => {
@@ -618,11 +618,11 @@ const Home = () => {
       </div>
 
       <div style={{ 
-        background: 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%)',
+        background: 'linear-gradient(135deg, #E8F5E9 0%, #E0F2F1 100%)',
         padding: '60px 20px',
         borderRadius: '24px',
         marginBottom: 60,
-        boxShadow: '0 20px 60px rgba(0, 188, 212, 0.2)',
+        boxShadow: '0 20px 60px rgba(26, 147, 111, 0.15)',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -1334,7 +1334,7 @@ const Home = () => {
       <div id="ai-planning-section" style={{ marginBottom: 60 }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Title level={2} style={{ fontSize: 32, fontWeight: 700, marginBottom: 12 }}>
-            <RocketOutlined style={{ color: '#667eea', marginRight: 12 }} />
+            <RocketOutlined style={{ color: '#1A936F', marginRight: 12 }} />
             AI 智能规划
           </Title>
           <Paragraph style={{ color: '#666', fontSize: 16, maxWidth: 600, margin: '0 auto' }}>
@@ -1451,7 +1451,7 @@ const Home = () => {
                                 fontSize: 16,
                                 fontWeight: 600,
                                 borderRadius: 12,
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                                 border: 'none'
                               }}
                             >
@@ -1617,7 +1617,7 @@ const Home = () => {
                                 fontSize: 16,
                                 fontWeight: 600,
                                 borderRadius: 12,
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                                 border: 'none'
                               }}
                             >
@@ -1629,7 +1629,7 @@ const Home = () => {
 
                       <Col xs={24} lg={8}>
                         <div style={{
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                           borderRadius: 16,
                           padding: 24,
                           color: '#fff'
@@ -1685,7 +1685,7 @@ const Home = () => {
                                   maxWidth: '70%',
                                   padding: '12px 16px',
                                   borderRadius: 16,
-                                  background: msg.role === 'user' ? '#667eea' : '#fff',
+                                  background: msg.role === 'user' ? '#1A936F' : '#fff',
                                   color: msg.role === 'user' ? '#fff' : '#333',
                                   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                                   whiteSpace: 'pre-line'
@@ -1698,7 +1698,7 @@ const Home = () => {
                           {isChatting && (
                             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                               <div style={{ padding: '12px 16px', background: '#fff', borderRadius: 16 }}>
-                                <LoadingOutlined style={{ color: '#667eea' }} />
+                                <LoadingOutlined style={{ color: '#1A936F' }} />
                               </div>
                             </div>
                           )}
@@ -1725,7 +1725,7 @@ const Home = () => {
                             loading={isChatting}
                             style={{
                               height: 'auto',
-                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                              background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                               border: 'none'
                             }}
                           />
@@ -1778,7 +1778,7 @@ const Home = () => {
                 <Progress
                   percent={planningProgress}
                   status="active"
-                  strokeColor={{ from: '#667eea', to: '#764ba2' }}
+                  strokeColor={{ from: '#1A936F', to: '#114B5F' }}
                 />
               </Card>
             </div>

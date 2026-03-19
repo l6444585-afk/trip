@@ -127,7 +127,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
         const period = periodMap[schedule.period] || { icon: '📍', label: '活动', time: '12:00' };
         return `
           <div class="activity" style="display: flex; gap: 15px; padding: 12px 0; border-bottom: 1px dashed #e5e7eb;">
-            <div class="activity-time" style="width: 60px; font-weight: 600; color: #667eea; flex-shrink: 0;">
+            <div class="activity-time" style="width: 60px; font-weight: 600; color: #1A936F; flex-shrink: 0;">
               ${period.time}
             </div>
             <div class="activity-content" style="flex: 1;">
@@ -144,7 +144,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
       }).join('');
 
       return `
-        <div class="day-card" style="background: #f9fafb; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+        <div class="day-card" style="background: #f9fafb; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #1A936F;">
           <div class="day-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #e5e7eb;">
             <div class="day-title" style="font-weight: 600; font-size: 1.1rem; color: #1f2937;">
               第 ${day} 天
@@ -183,7 +183,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
             overflow: hidden;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
             color: white;
             padding: 40px;
             text-align: center;
@@ -210,7 +210,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
         .stat-value {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #667eea;
+            color: #1A936F;
             margin-bottom: 5px;
         }
         .stat-label {
@@ -236,7 +236,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
         .section-title .icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -280,7 +280,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
             border-bottom: 1px solid #e5e7eb;
         }
         .budget-total {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
             color: white;
             padding: 20px;
             border-radius: 12px;
@@ -301,7 +301,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #1A936F;
         }
         .day-header {
             display: flex;
@@ -332,7 +332,7 @@ const generateItineraryHTML = (itinerary: Itinerary): string => {
         .activity-time {
             width: 60px;
             font-weight: 600;
-            color: #667eea;
+            color: #1A936F;
             flex-shrink: 0;
         }
         .activity-content {

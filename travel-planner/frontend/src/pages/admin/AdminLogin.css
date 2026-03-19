@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
   position: relative;
   overflow: hidden;
 }
@@ -81,7 +81,7 @@
 .login-logo .logo-icon {
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
   border-radius: 16px;
   display: inline-flex;
   align-items: center;
@@ -89,7 +89,7 @@
   color: white;
   font-size: 32px;
   font-weight: bold;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(26, 147, 111, 0.4);
 }
 
 .login-title {
@@ -112,8 +112,8 @@
 
 .login-card .ant-input-affix-wrapper:hover,
 .login-card .ant-input-affix-wrapper:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  border-color: #1A936F;
+  box-shadow: 0 0 0 2px rgba(26, 147, 111, 0.1);
 }
 
 .login-button {
@@ -121,9 +121,9 @@
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
   border: none;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(26, 147, 111, 0.4);
   transition: all 0.3s;
 }
 

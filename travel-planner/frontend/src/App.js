@@ -12,6 +12,7 @@ import './styles/responsive.css';
 import './styles/cross-browser.css';
 import './styles/performance.css';
 import './styles/accessibility.css';
+import './styles/nav-fix.css';
 
 setupAxiosDefaults();
 
@@ -28,6 +29,8 @@ const PrototypeListPage = lazy(() => import('./pages/PrototypeListPage'));
 const JiangnanTravelMap = lazy(() => import('./pages/JiangnanTravelMap'));
 const HotelSearchPage = lazy(() => import('./pages/HotelSearchPage'));
 const AdminApp = lazy(() => import('./pages/admin'));
+const ScenicList = lazy(() => import('./pages/Scenic/ScenicList'));
+const ScenicDetail = lazy(() => import('./pages/Scenic/ScenicDetail'));
 
 const PageLoader = () => (
   <div style={{
@@ -54,6 +57,8 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<LazyRoute><Home /></LazyRoute>} />
+            <Route path="/scenic" element={<LazyRoute><ScenicList /></LazyRoute>} />
+            <Route path="/scenic/:id" element={<LazyRoute><ScenicDetail /></LazyRoute>} />
             <Route path="/create" element={<LazyRoute><PrototypeCreatePage /></LazyRoute>} />
             <Route path="/create-react" element={<LazyRoute><ItineraryForm /></LazyRoute>} />
             <Route path="/itineraries" element={<LazyRoute><PrototypeListPage /></LazyRoute>} />

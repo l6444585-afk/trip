@@ -131,7 +131,7 @@ const HotelCard = ({ hotel, onFavorite, checkIn, checkOut }) => {
         <div style={{ 
           height: 180,
           flexShrink: 0,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -320,7 +320,7 @@ const HotelCard = ({ hotel, onFavorite, checkIn, checkOut }) => {
               icon={<LinkOutlined />}
               style={{ 
                 borderRadius: 8,
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                 border: 'none'
               }}
             >

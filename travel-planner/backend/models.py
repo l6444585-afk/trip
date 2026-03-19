@@ -150,6 +150,10 @@ class Attraction(Base):
     tips = Column(Text, nullable=True)
     warnings = Column(Text, nullable=True)
     
+    platform_links = Column(JSON, nullable=True)
+    images = Column(JSON, nullable=True)
+    province = Column(String(50), nullable=True)
+    
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

@@ -40,7 +40,7 @@ export const COMPANION_OPTIONS: CompanionOption[] = [
 
 /** 旅游风格选项 */
 export const TRAVEL_STYLE_OPTIONS: TravelStyleOption[] = [
-  { label: '🎯 精品深度', value: '精品深度', description: '深入体验,品质优先', color: '#667eea' },
+  { label: '🎯 精品深度', value: '精品深度', description: '深入体验,品质优先', color: '#1A936F' },
   { label: '⚡ 高效紧凑', value: '高效紧凑', description: '行程紧凑,高效游览', color: '#f5576c' },
   { label: '🌿 休闲放松', value: '休闲放松', description: '慢节奏,享受当下', color: '#4facfe' },
   { label: '🎪 丰富多样', value: '丰富多样', description: '体验多元,精彩纷呈', color: '#fa709a' }

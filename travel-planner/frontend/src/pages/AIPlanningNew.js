@@ -243,7 +243,7 @@ const AIPlanning = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
             <Title level={2} style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <RocketOutlined style={{ color: '#667eea' }} />
+              <RocketOutlined style={{ color: '#1A936F' }} />
               AI 智能规划
             </Title>
             <Paragraph style={{ color: '#8a8a8a', marginTop: 8, fontSize: 15 }}>
@@ -276,7 +276,7 @@ const AIPlanning = () => {
           <Card className="card card-elevated" style={{ marginBottom: 24 }}>
             <div style={{ marginBottom: 24 }}>
               <Title level={4} style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <AimOutlined style={{ color: '#667eea' }} />
+                <AimOutlined style={{ color: '#1A936F' }} />
                 快速规划
               </Title>
               <Paragraph style={{ color: '#8a8a8a', marginBottom: 20 }}>
@@ -442,7 +442,7 @@ const AIPlanning = () => {
               {isGenerating ? (
                 <div style={{ textAlign: 'center', padding: '40px 0' }}>
                   <Spin
-                    indicator={<LoadingOutlined style={{ fontSize: 48, color: '#667eea' }} spin />}
+                    indicator={<LoadingOutlined style={{ fontSize: 48, color: '#1A936F' }} spin />}
                     tip="GLM-4.7 正在为您规划行程..."
                   />
                   <div style={{ marginTop: 24 }}>
@@ -454,9 +454,9 @@ const AIPlanning = () => {
                     <Progress 
                       percent={planningProgress} 
                       strokeColor={{
-                        '0%': '#667eea',
-                        '50%': '#764ba2',
-                        '100%': '#f093fb'
+                        '0%': '#1A936F',
+                        '50%': '#114B5F',
+                        '100%': '#88D498'
                       }}
                       size={8}
                     />
@@ -476,7 +476,7 @@ const AIPlanning = () => {
                       fontSize: 17,
                       fontWeight: 600,
                       borderRadius: 12,
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                       border: 'none'
                     }}
                   >
@@ -489,7 +489,7 @@ const AIPlanning = () => {
 
           <Card className="card" title={
             <Space>
-              <MessageOutlined style={{ color: '#667eea' }} />
+              <MessageOutlined style={{ color: '#1A936F' }} />
               <span>智能对话</span>
             </Space>
           }>
@@ -511,7 +511,7 @@ const AIPlanning = () => {
                     maxWidth: '80%',
                     padding: '12px 16px',
                     borderRadius: 12,
-                    background: msg.role === 'user' ? '#667eea' : '#fff',
+                    background: msg.role === 'user' ? '#1A936F' : '#fff',
                     color: msg.role === 'user' ? '#fff' : '#1a1a1a',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                   }}>
@@ -625,7 +625,7 @@ const AIPlanning = () => {
 
           <Card className="card" title={
             <Space>
-              <ThunderboltOutlined style={{ color: '#667eea' }} />
+              <ThunderboltOutlined style={{ color: '#1A936F' }} />
               <span>AI 能力展示</span>
             </Space>
           }>
@@ -778,7 +778,7 @@ const AIPlanning = () => {
                 <Panel 
                   header={
                     <Space>
-                      <Badge count={day.day} style={{ backgroundColor: '#667eea' }} />
+                      <Badge count={day.day} style={{ backgroundColor: '#1A936F' }} />
                       <Text strong>第 {day.day} 天</Text>
                       <Text style={{ color: '#8a8a8a' }}>{day.date}</Text>
                     </Space>

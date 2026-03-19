@@ -38,7 +38,7 @@ export const COMPANION_OPTIONS = [
 
 /** 旅游风格选项 */
 export const TRAVEL_STYLE_OPTIONS = [
-  { label: '🎯 精品深度', value: '精品深度', description: '深入体验,品质优先', color: '#667eea' },
+  { label: '🎯 精品深度', value: '精品深度', description: '深入体验,品质优先', color: '#1A936F' },
   { label: '⚡ 高效紧凑', value: '高效紧凑', description: '行程紧凑,高效游览', color: '#f5576c' },
   { label: '🌿 休闲放松', value: '休闲放松', description: '慢节奏,享受当下', color: '#4facfe' },
   { label: '🎪 丰富多样', value: '丰富多样', description: '体验多元,精彩纷呈', color: '#fa709a' }
@@ -100,10 +100,10 @@ export const DINING_DATA = [
 
 /** 系统特色功能 */
 export const SYSTEM_FEATURES = [
-  { icon: 'EnvironmentOutlined', iconColor: '#667eea', title: '智能推荐', description: 'GLM-4.7 推理引擎驱动 - 基于200K超长上下文窗口，结合实时联网数据，为您推荐最符合个人喜好的景点、美食和活动。模型的多语言理解能力确保推荐精准度。' },
+  { icon: 'EnvironmentOutlined', iconColor: '#1A936F', title: '智能推荐', description: 'GLM-4.7 推理引擎驱动 - 基于200K超长上下文窗口，结合实时联网数据，为您推荐最符合个人喜好的景点、美食和活动。模型的多语言理解能力确保推荐精准度。' },
   { icon: 'CameraOutlined', iconColor: '#f5576c', title: '路线优化', description: '多Agent并行规划 - 采用类似Claude Code的Session隔离技术，多个GLM-4.7 Agent同时工作：一个规划景点顺序，一个计算交通时间，一个优化步行路线，最终生成最短时间和最佳体验的行程。' },
   { icon: 'StarOutlined', iconColor: '#00f2fe', title: '行程管理', description: 'Claude Code式工作流 - 所有行程基于GLM-4.7生成，支持随时调整参数并一键重新规划。保留式思考模式确保修改历史完整，可随时回溯或微调。' },
-  { icon: 'HeartOutlined', iconColor: '#764ba2', title: '预算管理', description: '动态工具调用 - GLM-4.7的精准工具调用能力实时分析价格趋势，自动计算交通、住宿、餐饮成本，并提供预算预警和替代方案，确保您的行程在预算范围内。' }
+  { icon: 'HeartOutlined', iconColor: '#114B5F', title: '预算管理', description: '动态工具调用 - GLM-4.7的精准工具调用能力实时分析价格趋势，自动计算交通、住宿、餐饮成本，并提供预算预警和替代方案，确保您的行程在预算范围内。' }
 ];
 
 /** 状态颜色映射 */

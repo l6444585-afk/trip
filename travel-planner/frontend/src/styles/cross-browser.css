@@ -2,8 +2,8 @@
 
 /* CSS变量回退 */
 :root {
-  --primary-color: #667eea;
-  --primary-color-fallback: #667eea;
+  --primary-color: #1A936F;
+  --primary-color-fallback: #1A936F;
 }
 
 /* 浏览器前缀 */
@@ -58,16 +58,16 @@
 
 /* 渐变回退 */
 .gradient-fallback {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background: -webkit-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background: -moz-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background: -o-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background: -ms-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  background: -webkit-linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  background: -moz-linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  background: -o-linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
+  background: -ms-linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
 }
 
-@supports not (background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)) {
+@supports not (background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%)) {
   .gradient-fallback {
-    background-color: #667eea;
+    background-color: #1A936F;
   }
 }
 
@@ -138,7 +138,7 @@
 
 /* 文本裁剪回退 */
 .text-clip-fallback {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -146,7 +146,7 @@
 
 @supports not (-webkit-background-clip: text) {
   .text-clip-fallback {
-    color: #667eea;
+    color: #1A936F;
     background: none;
     -webkit-text-fill-color: initial;
   }
@@ -227,7 +227,7 @@
 
 /* 焦点样式回退 */
 .focus-ring:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
@@ -236,23 +236,22 @@
 }
 
 .focus-ring:focus-visible {
-  outline: 2px solid #667eea;
+  outline: 2px solid #1A936F;
   outline-offset: 2px;
 }
 
-/* 文本选择回退 */
-.selection-custom::selection {
-  background: rgba(102, 126, 234, 0.2);
+.text-selection-custom::selection {
+  background: rgba(26, 147, 111, 0.2);
   color: inherit;
 }
 
-.selection-custom::-moz-selection {
-  background: rgba(102, 126, 234, 0.2);
+.text-selection-custom::-moz-selection {
+  background: rgba(26, 147, 111, 0.2);
   color: inherit;
 }
 
-.selection-custom::-webkit-selection {
-  background: rgba(102, 126, 234, 0.2);
+.text-selection-custom::-webkit-selection {
+  background: rgba(26, 147, 111, 0.2);
   color: inherit;
 }
 
@@ -459,11 +458,11 @@
   }
   
   .gradient-fallback {
-    background: #667eea;
+    background: #1A936F;
   }
   
   .text-clip-fallback {
-    color: #667eea;
+    color: #1A936F;
     background: none;
   }
 }

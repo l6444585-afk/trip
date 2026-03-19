@@ -104,7 +104,7 @@
   --paper-white: #FAFAFA;
   --paper-cream: #FFF8E1;
 
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-primary: linear-gradient(135deg, #1A936F 0%, #114B5F 100%);
   --gradient-jade: linear-gradient(135deg, #2E8B57 0%, #4CAF50 100%);
   --gradient-water: linear-gradient(135deg, #4A90A4 0%, #64B5F6 100%);
   --gradient-sunset: linear-gradient(135deg, #FF7043 0%, #FFCA28 100%);

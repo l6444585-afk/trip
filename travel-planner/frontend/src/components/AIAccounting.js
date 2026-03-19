@@ -528,12 +528,12 @@ const AIAccounting = ({
             width: 56,
             height: 56,
             borderRadius: 16,
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginRight: 20,
-            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+            boxShadow: '0 4px 12px rgba(26, 147, 111, 0.4)'
           }}>
             <WalletOutlined style={{ fontSize: 28, color: '#fff' }} />
           </div>
@@ -1066,7 +1066,7 @@ const AIAccounting = ({
               width: 32,
               height: 32,
               borderRadius: 8,
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -1216,7 +1216,7 @@ const AIAccounting = ({
             width: 80,
             height: 80,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

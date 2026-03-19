@@ -859,8 +859,8 @@ export const AIPlanningWizard: React.FC = () => {
           <Progress
             percent={progress.percentage}
             strokeColor={{
-              '0%': '#667eea',
-              '100%': '#764ba2'
+              '0%': '#1A936F',
+              '100%': '#114B5F'
             }}
             strokeWidth={8}
             showInfo={false}

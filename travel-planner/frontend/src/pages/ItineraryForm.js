@@ -108,7 +108,7 @@ const ItineraryForm = () => {
       >
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Title level={2} style={{ marginBottom: 8 }}>
-            <ThunderboltOutlined style={{ color: '#667eea', marginRight: 12 }} />
+            <ThunderboltOutlined style={{ color: '#1A936F', marginRight: 12 }} />
             创建智能行程
           </Title>
           <Paragraph style={{ color: '#666', fontSize: 16 }}>
@@ -320,7 +320,7 @@ const ItineraryForm = () => {
                 fontSize: 18,
                 fontWeight: 600,
                 borderRadius: 16,
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                 border: 'none'
               }}
             >

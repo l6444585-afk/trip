@@ -125,7 +125,7 @@ const PopularDestinations = ({
                   fontSize: 14,
                   fontWeight: 500,
                   transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #1A936F 0%, #114B5F 100%)',
                   border: 'none'
                 }}
                 onMouseEnter={(e) => {
