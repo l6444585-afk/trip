@@ -33,24 +33,20 @@ CATEGORY_TYPES = {
 }
 PLATFORM_LINKS = {
     "ctrip": {
-        "name": "携程旅行",
-        "search_url": "https://you.ctrip.com/sightplace/search.html?keyword={keyword}",
-        "icon": "https://webresource.ctrip.com/ResRMSImage/RMSImageAssets/1.0.0/logo.png"
+        "name": "携程",
+        "search_url": "https://you.ctrip.com/sight/0/s-{keyword}.html",
     },
     "qunar": {
         "name": "去哪儿",
-        "search_url": "https://travel.qunar.com/p-oi/search?keyword={keyword}",
-        "icon": "https://img.qunarzz.com/qunar/touch/v2/images/logo.png"
+        "search_url": "https://piao.qunar.com/ticket/list.htm?keyword={keyword}",
     },
     "mafengwo": {
         "name": "马蜂窝",
-        "search_url": "https://www.mafengwo.cn/search/s.php?q={keyword}",
-        "icon": "https://images.mafengwo.net/images/logo/logo.png"
+        "search_url": "https://www.mafengwo.cn/search/q.php?q={keyword}",
     },
-    "meituan": {
-        "name": "美团",
-        "search_url": "https://www.meituan.com/jd/search/?keyword={keyword}",
-        "icon": "https://img.meituan.net/bs/file/?f=logo/logo.png"
+    "fliggy": {
+        "name": "飞猪旅行",
+        "search_url": "https://www.fliggy.com/search/index?searchType=product&keyword={keyword}",
     }
 }
 
@@ -65,31 +61,37 @@ def get_province_by_city(city: str) -> str:
     return "未知"
 
 
-def format_attraction(a: Attraction) -> dict:
+def _parse_json_field(value, default=None):
+    """安全解析 JSON 字段"""
+    if default is None:
+        default = [] if isinstance(default, list) else {}
+    if not value:
+        return default
+    try:
+        return json.loads(value) if isinstance(value, str) else value
+    except (json.JSONDecodeError, TypeError):
+        return default
+
+
+def _build_platform_links(name, raw_links):
+    """构建平台链接，无数据时用默认搜索链接 fallback"""
+    links = _parse_json_field(raw_links, {})
+    if not links:
+        for platform, info in PLATFORM_LINKS.items():
+            links[platform] = {
+                "name": info["name"],
+                "url": info["search_url"].format(keyword=name),
+                "icon": info["icon"]
+            }
+    return links
+
+
+def format_attraction(a: Attraction, detail=False) -> dict:
     """
     格式化景区数据
+    detail=True 时返回完整字段（详情页用）
     """
-    images = []
-    if a.images:
-        try:
-            if isinstance(a.images, str):
-                images = json.loads(a.images)
-            else:
-                images = a.images
-        except:
-            images = []
-    
-    platform_links = {}
-    if a.platform_links:
-        try:
-            if isinstance(a.platform_links, str):
-                platform_links = json.loads(a.platform_links)
-            else:
-                platform_links = a.platform_links
-        except:
-            platform_links = {}
-    
-    return {
+    data = {
         "id": a.id,
         "name": a.name,
         "city": a.city,
@@ -106,11 +108,31 @@ def format_attraction(a: Attraction) -> dict:
         "open_time": a.open_time,
         "close_time": a.close_time,
         "image_url": a.image_url,
-        "images": images,
+        "images": _parse_json_field(a.images, []),
         "tags": a.tags.split(",") if a.tags else [],
         "booking_required": a.booking_required,
-        "platform_links": platform_links if platform_links else {}
+        "platform_links": _build_platform_links(a.name, a.platform_links)
     }
+
+    if detail:
+        data.update({
+            "avg_visit_duration": a.avg_visit_duration,
+            "recommended_duration": a.recommended_duration,
+            "closed_days": a.closed_days,
+            "booking_advance_days": a.booking_advance_days,
+            "booking_url": a.booking_url,
+            "suitable_for": a.suitable_for.split(",") if a.suitable_for else [],
+            "best_time_to_visit": a.best_time_to_visit,
+            "peak_hours": a.peak_hours,
+            "phone": a.phone,
+            "website": a.website,
+            "tips": a.tips,
+            "warnings": a.warnings,
+            "created_at": a.created_at,
+            "updated_at": a.updated_at
+        })
+
+    return data
 
 
 @router.get("/", response_model=dict)
@@ -336,73 +358,10 @@ async def get_scenic_spot_detail(
     attraction = db.query(Attraction).filter(Attraction.id == attraction_id).first()
     if not attraction:
         raise HTTPException(status_code=404, detail="景区不存在")
-    
-    images = []
-    if attraction.images:
-        try:
-            if isinstance(attraction.images, str):
-                images = json.loads(attraction.images)
-            else:
-                images = attraction.images
-        except:
-            images = []
-    
-    platform_links = {}
-    if attraction.platform_links:
-        try:
-            if isinstance(attraction.platform_links, str):
-                platform_links = json.loads(attraction.platform_links)
-            else:
-                platform_links = attraction.platform_links
-        except:
-            platform_links = {}
-    
-    if not platform_links:
-        for platform, info in PLATFORM_LINKS.items():
-            platform_links[platform] = {
-                "name": info["name"],
-                "url": info["search_url"].format(keyword=attraction.name),
-                "icon": info["icon"]
-            }
-    
+
     return {
         "success": True,
-        "data": {
-            "id": attraction.id,
-            "name": attraction.name,
-            "city": attraction.city,
-            "province": attraction.province or get_province_by_city(attraction.city),
-            "category": attraction.category,
-            "description": attraction.description,
-            "latitude": attraction.latitude,
-            "longitude": attraction.longitude,
-            "address": attraction.address,
-            "rating": attraction.rating,
-            "popularity": attraction.popularity,
-            "avg_visit_duration": attraction.avg_visit_duration,
-            "recommended_duration": attraction.recommended_duration,
-            "open_time": attraction.open_time,
-            "close_time": attraction.close_time,
-            "closed_days": attraction.closed_days,
-            "ticket_price": attraction.ticket_price,
-            "ticket_price_peak": attraction.ticket_price_peak,
-            "booking_required": attraction.booking_required,
-            "booking_advance_days": attraction.booking_advance_days,
-            "booking_url": attraction.booking_url,
-            "tags": attraction.tags.split(",") if attraction.tags else [],
-            "suitable_for": attraction.suitable_for.split(",") if attraction.suitable_for else [],
-            "best_time_to_visit": attraction.best_time_to_visit,
-            "peak_hours": attraction.peak_hours,
-            "image_url": attraction.image_url,
-            "images": images,
-            "phone": attraction.phone,
-            "website": attraction.website,
-            "tips": attraction.tips,
-            "warnings": attraction.warnings,
-            "platform_links": platform_links,
-            "created_at": attraction.created_at,
-            "updated_at": attraction.updated_at
-        }
+        "data": format_attraction(attraction, detail=True)
     }
 
 

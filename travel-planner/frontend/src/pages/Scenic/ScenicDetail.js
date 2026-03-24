@@ -39,6 +39,7 @@ import {
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AMapLoader from '@amap/amap-jsapi-loader';
+import { initAmapSecurity, getAmapKey } from '../../utils/amapSecurity';
 import './ScenicDetail.css';
 
 const { Title, Text, Paragraph } = Typography;
@@ -47,7 +48,7 @@ const platformIcons = {
   ctrip: { name: '携程', color: '#2577E3', bgColor: '#E8F4FD' },
   qunar: { name: '去哪儿', color: '#FF7D00', bgColor: '#FFF4E6' },
   mafengwo: { name: '马蜂窝', color: '#FF9D00', bgColor: '#FFF8E6' },
-  meituan: { name: '美团', color: '#FFC300', bgColor: '#FFFBEB' }
+  fliggy: { name: '飞猪旅行', color: '#FF5000', bgColor: '#FFF0E6' }
 };
 
 const ScenicDetail = () => {
@@ -64,23 +65,36 @@ const ScenicDetail = () => {
   const mapRef = useRef(null);
   const mapModalRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const modalMapInstanceRef = useRef(null);
   const carouselRef = useRef(null);
 
   useEffect(() => {
     fetchScenicDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
     if (scenic && scenic.latitude && scenic.longitude && mapRef.current) {
       initMap(mapRef, 'card');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scenic]);
 
   useEffect(() => {
     if (mapModalVisible && scenic && scenic.latitude && scenic.longitude && mapModalRef.current) {
       initMap(mapModalRef, 'modal');
     }
-  }, [mapModalVisible, scenic]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapModalVisible]);
+
+  useEffect(() => {
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.destroy();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, []);
 
   const fetchScenicDetail = async () => {
     setLoading(true);
@@ -107,21 +121,22 @@ const ScenicDetail = () => {
   const initMap = async (mapElementRef, type) => {
     if (!mapElementRef?.current) return;
 
-    if (type === 'modal' && mapInstanceRef.current) {
-      mapInstanceRef.current.setTarget(null);
-      mapInstanceRef.current = null;
+    const instanceRef = type === 'modal' ? modalMapInstanceRef : mapInstanceRef;
+
+    if (instanceRef.current) {
+      instanceRef.current.destroy();
+      instanceRef.current = null;
     }
 
     try {
+      initAmapSecurity();
+
+      const amapKey = getAmapKey();
       const AMap = await AMapLoader.load({
-        key: process.env.REACT_APP_AMAP_KEY || 'your_amap_key',
+        key: amapKey,
         version: '2.0',
         plugins: ['AMap.Marker', 'AMap.InfoWindow']
       });
-
-      window._AMapSecurityConfig = {
-        securityJsCode: process.env.REACT_APP_AMAP_SECURITY_CODE || ''
-      };
 
       const map = new AMap.Map(mapElementRef.current, {
         zoom: type === 'modal' ? 15 : 14,
@@ -150,7 +165,7 @@ const ScenicDetail = () => {
         infoWindow.open(map, marker.getPosition());
       });
 
-      mapInstanceRef.current = map;
+      instanceRef.current = map;
     } catch (error) {
       console.error('地图初始化失败:', error);
     }
@@ -173,7 +188,7 @@ const ScenicDetail = () => {
     }
   };
 
-  const handlePlatformClick = (platform, url) => {
+  const handlePlatformClick = (url) => {
     window.open(url, '_blank');
   };
 
@@ -309,7 +324,7 @@ const ScenicDetail = () => {
                 key={key}
                 type="default"
                 block
-                onClick={() => handlePlatformClick(key, platform.url)}
+                onClick={() => handlePlatformClick(platform.url)}
                 className="platform-button"
                 style={{
                   borderColor: iconInfo.color,
@@ -346,10 +361,10 @@ const ScenicDetail = () => {
       return (
         <div className="scenic-hero">
           <Image
-            src="https://via.placeholder.com/800x400?text=暂无图片"
+            src="https://placehold.co/800x400/114b5f/ffffff?text=暂无图片"
             alt={scenic.name}
             className="scenic-image"
-            fallback="https://via.placeholder.com/800x400?text=暂无图片"
+            fallback="https://placehold.co/800x400/114b5f/ffffff?text=暂无图片"
           />
         </div>
       );
@@ -362,7 +377,7 @@ const ScenicDetail = () => {
             src={displayImages[0]}
             alt={scenic.name}
             className="scenic-image"
-            fallback="https://via.placeholder.com/800x400?text=暂无图片"
+            fallback="https://placehold.co/800x400/114b5f/ffffff?text=暂无图片"
             preview={{ mask: <div className="preview-mask"><span>点击预览</span></div> }}
           />
           <div className="scenic-badges">
@@ -388,7 +403,7 @@ const ScenicDetail = () => {
                 src={img}
                 alt={`${scenic.name} - 图片${index + 1}`}
                 className="scenic-image"
-                fallback="https://via.placeholder.com/800x400?text=暂无图片"
+                fallback="https://placehold.co/800x400/114b5f/ffffff?text=暂无图片"
                 preview={false}
               />
             </div>
@@ -640,7 +655,7 @@ const ScenicDetail = () => {
       <Modal
         title={scenic?.name}
         open={mapModalVisible}
-        onCancel={() => setMapModalVisible(false)}
+        onCancel={() => { if (modalMapInstanceRef.current) { modalMapInstanceRef.current.destroy(); modalMapInstanceRef.current = null; } setMapModalVisible(false); }}
         footer={null}
         width={800}
         className="map-modal"

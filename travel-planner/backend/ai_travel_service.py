@@ -207,14 +207,21 @@ class ConversationSession:
 
 class AITravelService:
     def __init__(self):
+        self.doubao_api_key = os.getenv("DOUBAO_API_KEY")
+        self.doubao_endpoint = os.getenv("DOUBAO_ENDPOINT")
+        self.doubao_base_url = "https://ark.cn-beijing.volces.com/api/v3"
+
         self.glm_api_key = os.getenv("GLM_API_KEY")
         self.glm_model = os.getenv("GLM_MODEL", "glm-4-flash")
-        
+
         self.siliconflow_api_key = os.getenv("SILICONFLOW_API_KEY")
         self.siliconflow_base_url = os.getenv("SILICONFLOW_BASE_URL", "https://api.siliconflow.cn/v1")
         self.siliconflow_model = os.getenv("SILICONFLOW_MODEL", "Qwen/Qwen2.5-7B-Instruct")
-        
-        if self.glm_api_key and self.glm_api_key != "your_glm_api_key_here":
+
+        if self.doubao_api_key and self.doubao_endpoint:
+            self.provider = "doubao"
+            logger.info(f"AI Travel Service initialized with Doubao, endpoint: {self.doubao_endpoint}")
+        elif self.glm_api_key and self.glm_api_key != "your_glm_api_key_here":
             self.provider = "zhipu"
             logger.info(f"AI Travel Service initialized with ZhipuAI, model: {self.glm_model}")
         elif self.siliconflow_api_key and self.siliconflow_api_key != "your_siliconflow_api_key_here":
@@ -223,11 +230,11 @@ class AITravelService:
         else:
             self.provider = "mock"
             logger.warning("No valid API key configured, using mock responses")
-        
+
         self.sessions: Dict[str, ConversationSession] = {}
         self.max_tokens = 4000
         self.temperature = 0.7
-        
+
         if self.provider == "zhipu":
             try:
                 from zhipuai import ZhipuAI
@@ -266,15 +273,17 @@ class AITravelService:
             }
         
         try:
-            if self.provider == "zhipu":
+            if self.provider == "doubao":
+                response = await self._call_doubao_api(messages)
+            elif self.provider == "zhipu":
                 response = await self._call_zhipu_api(messages)
             else:
                 response = await self._call_siliconflow_api(messages)
-            
+
             content = response.get("content", "")
             session.add_message("assistant", content)
             self._update_context(session, message, content)
-            
+
             return {
                 "content": content,
                 "stream": False,
@@ -291,6 +300,31 @@ class AITravelService:
                 "error": str(e)
             }
     
+    async def _call_doubao_api(self, messages: List[Dict]) -> Dict:
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.doubao_api_key}"
+        }
+        payload = {
+            "model": self.doubao_endpoint,
+            "messages": messages,
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens
+        }
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            response = await client.post(
+                f"{self.doubao_base_url}/chat/completions",
+                headers=headers,
+                json=payload
+            )
+            if response.status_code != 200:
+                raise Exception(f"Doubao API returned status {response.status_code}: {response.text}")
+            data = response.json()
+            return {
+                "content": data["choices"][0]["message"]["content"],
+                "usage": data.get("usage", {})
+            }
+
     async def _call_zhipu_api(self, messages: List[Dict]) -> Dict:
         try:
             response = await asyncio.to_thread(
@@ -471,11 +505,13 @@ class AITravelService:
             return self._mock_itinerary(departure, destination, days, budget)
         
         try:
-            if self.provider == "zhipu":
+            if self.provider == "doubao":
+                response = await self._call_doubao_api(messages)
+            elif self.provider == "zhipu":
                 response = await self._call_zhipu_api(messages)
             else:
                 response = await self._call_siliconflow_api(messages)
-            
+
             content = response.get("content", "")
             session.add_message("assistant", content)
             

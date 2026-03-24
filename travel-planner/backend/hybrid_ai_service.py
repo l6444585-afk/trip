@@ -9,7 +9,10 @@ from models import Attraction, City, UserPreference
 from itinerary_planner import ItineraryPlanner, ItineraryOptimizer
 import json
 import os
-from zhipuai import ZhipuAI
+try:
+    from zhipuai import ZhipuAI
+except ImportError:
+    ZhipuAI = None
 
 class HybridItineraryService:
     def __init__(self, db: Session):

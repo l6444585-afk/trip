@@ -13,7 +13,10 @@ import time
 from functools import lru_cache
 import hashlib
 
-from zhipuai import ZhipuAI
+try:
+    from zhipuai import ZhipuAI
+except ImportError:
+    ZhipuAI = None
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)

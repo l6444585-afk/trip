@@ -24,8 +24,6 @@ const ItineraryDetailJiangnan = lazy(() => import('./pages/ItineraryDetailJiangn
 const AIPlanningNew = lazy(() => import('./pages/AIPlanningNew'));
 const AITravelPlanner = lazy(() => import('./pages/AITravelPlanner'));
 const AIAccountingPage = lazy(() => import('./pages/AIAccountingPage'));
-const PrototypeCreatePage = lazy(() => import('./pages/PrototypeCreatePage'));
-const PrototypeListPage = lazy(() => import('./pages/PrototypeListPage'));
 const JiangnanTravelMap = lazy(() => import('./pages/JiangnanTravelMap'));
 const HotelSearchPage = lazy(() => import('./pages/HotelSearchPage'));
 const AdminApp = lazy(() => import('./pages/admin'));
@@ -59,10 +57,8 @@ function App() {
             <Route path="/" element={<LazyRoute><Home /></LazyRoute>} />
             <Route path="/scenic" element={<LazyRoute><ScenicList /></LazyRoute>} />
             <Route path="/scenic/:id" element={<LazyRoute><ScenicDetail /></LazyRoute>} />
-            <Route path="/create" element={<LazyRoute><PrototypeCreatePage /></LazyRoute>} />
-            <Route path="/create-react" element={<LazyRoute><ItineraryForm /></LazyRoute>} />
-            <Route path="/itineraries" element={<LazyRoute><PrototypeListPage /></LazyRoute>} />
-            <Route path="/itineraries-react" element={<LazyRoute><ItineraryList /></LazyRoute>} />
+            <Route path="/create" element={<LazyRoute><ItineraryForm /></LazyRoute>} />
+            <Route path="/itineraries" element={<LazyRoute><ItineraryList /></LazyRoute>} />
             <Route path="/itinerary/:id" element={<LazyRoute><ItineraryDetail /></LazyRoute>} />
             <Route path="/itinerary-jiangnan/:id" element={<LazyRoute><ItineraryDetailJiangnan /></LazyRoute>} />
             <Route path="/auth" element={<Auth />} />

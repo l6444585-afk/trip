@@ -1,20 +1,126 @@
-第一步：启动后端服务,打开命令行窗口（CMD或PowerShell）
-# 切换到D盘的后端目录
+====================================
+Windows 启动方式
+====================================
+
+第一步：启动后端服务
+
+1. 打开命令行窗口（CMD或PowerShell）
+2. 执行以下命令：
+
 cd /d d:\Trae\trip\travel-planner\backend
-
-# 激活虚拟环境
 venv\Scripts\activate
-
-# 运行后端服务
 python main.py
 
+后端启动在 http://localhost:8891
 
 
 第二步：启动前端服务
 
 1. 打开另一个命令行窗口
 2. 执行以下命令：
-cd d:\Trae\trip\travel-planner\frontend
+
+cd /d d:\Trae\trip\travel-planner\frontend
+set REACT_APP_API_URL=http://localhost:8891
 npm start
 
-执行以上就可以启动该系统
+前端启动在 http://localhost:3000
+浏览器访问 http://localhost:3000 即可打开系统
+
+
+====================================
+Mac mini 启动方式
+====================================
+
+第一步：启动后端服务
+
+1. 打开终端（Terminal）
+2. 执行以下命令：
+
+cd /Users/tkag/Projects/trip/travel-planner/backend
+source venv/bin/activate
+python main.py
+
+后端启动在 http://localhost:8891
+
+
+第二步：启动前端服务
+
+1. 新开一个终端窗口（Command + T）
+2. 执行以下命令：
+
+cd /Users/tkag/Projects/trip/travel-planner/frontend
+REACT_APP_API_URL=http://localhost:8891 npm start
+
+前端启动在 http://localhost:3000
+浏览器访问 http://localhost:3000 即可打开系统
+
+
+====================================
+Mac mini 启动方式（Fish Shell）
+====================================
+
+第一步：启动后端服务
+
+1. 打开终端（Terminal）
+2. 执行以下命令：
+
+cd /Users/tkag/Projects/trip/travel-planner/backend
+source venv/bin/activate.fish
+python3 main.py
+
+后端启动在 http://localhost:8891
+
+
+第二步：启动前端服务
+
+1. 新开一个终端窗口（Command + T）
+2. 执行以下命令：
+
+cd /Users/tkag/Projects/trip/travel-planner/frontend
+set -x REACT_APP_API_URL http://localhost:8891
+npm start
+
+前端启动在 http://localhost:3000
+浏览器访问 http://localhost:3000 即可打开系统
+
+
+====================================
+Docker 启动方式（推荐，Windows/Mac 通用）
+====================================
+
+前提：已安装 Docker Desktop 并启动。
+
+1. 打开终端（Windows用CMD/PowerShell，Mac用Terminal）
+2. 进入项目目录：
+
+   Windows:  cd /d D:\Trae\trip\travel-planner
+   Mac:      cd /Users/tkag/Projects/trip/travel-planner
+
+3. 启动：
+
+   docker compose up -d
+
+4. 浏览器访问：
+
+   前端: http://localhost:3890
+   后端: http://localhost:8890
+
+5. 停止：
+
+   docker compose down
+
+6. 如果改了代码需要重新构建：
+
+   docker compose up -d --build
+
+
+====================================
+端口说明
+====================================
+
+| 服务   | Docker端口 | 手动启动端口 |
+|--------|-----------|-------------|
+| 后端   | 8890      | 8891        |
+| 前端   | 3890      | 3000        |
+
+Docker 和手动启动可以同时运行，互不冲突。

@@ -56,9 +56,9 @@ class Settings(BaseSettings):
 
     AMAP_API_KEY: Optional[str] = None
 
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "http://localhost:3890"
 
-    CORS_ORIGINS: List[str] = Field(default=["http://localhost:3000", "http://127.0.0.1:3000"])
+    CORS_ORIGINS: List[str] = Field(default=["http://localhost:3890", "http://127.0.0.1:3890"])
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: List[str] = Field(default=["*"])
     CORS_ALLOW_HEADERS: List[str] = Field(default=["*"])

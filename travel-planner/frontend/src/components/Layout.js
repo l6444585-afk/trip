@@ -20,31 +20,14 @@ import {
   HomeFilled,
   MenuOutlined,
   CloseOutlined,
-  SettingFilled,
   DashboardOutlined,
-  CompassOutlined,
-  FireOutlined,
-  ShopOutlined,
-  BankOutlined,
-  CarOutlined,
-  GlobalOutlined,
-  RadarChartOutlined,
-  ExperimentOutlined,
-  CloudOutlined,
-  ApartmentOutlined
+  CompassOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 
 const { Header, Content, Footer } = AntLayout;
-const { Title, Text } = Typography;
-
-const isMobile = () => {
-  if (typeof window !== 'undefined') {
-    return window.innerWidth < 768;
-  }
-  return false;
-};
+const { Text } = Typography;
 
 /**
  * 布局组件
@@ -59,39 +42,6 @@ const Layout = ({ children }) => {
   const [searchText, setSearchText] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrollRef = React.useRef(null);
-
-  const scenicCategories = [
-    { key: '/scenic?category=自然风光', label: '自然风光', icon: <ExperimentOutlined /> },
-    { key: '/scenic?category=历史文化', label: '历史文化', icon: <BankOutlined /> },
-    { key: '/scenic?category=主题乐园', label: '主题乐园', icon: <RadarChartOutlined /> },
-    { key: '/scenic?category=博物馆', label: '博物馆', icon: <GlobalOutlined /> },
-    { key: '/scenic?category=古镇村落', label: '古镇村落', icon: <ShopOutlined /> },
-    { key: '/scenic?category=海滨岛屿', label: '海滨岛屿', icon: <CarOutlined /> },
-    { key: '/scenic?category=宗教场所', label: '宗教场所', icon: <FireOutlined /> },
-    { key: '/scenic?category=城市景观', label: '城市景观', icon: <ApartmentOutlined /> }
-  ];
-
-  const cityQuickAccess = [
-    { key: '/scenic?city=杭州', label: '杭州', subLabel: '西湖、千岛湖' },
-    { key: '/scenic?city=苏州', label: '苏州', subLabel: '园林、水乡' },
-    { key: '/scenic?city=上海', label: '上海', subLabel: '都市、迪士尼' },
-    { key: '/scenic?city=南京', label: '南京', subLabel: '古城、陵墓' },
-    { key: '/scenic?city=宁波', label: '宁波', subLabel: '海港、溪口' },
-    { key: '/scenic?city=舟山', label: '舟山', subLabel: '普陀山、海岛' },
-    { key: '/scenic?city=无锡', label: '无锡', subLabel: '太湖、灵山' },
-    { key: '/scenic?city=嘉兴', label: '嘉兴', subLabel: '乌镇、西塘' }
-  ];
-
-  const popularScenicSpots = [
-    { key: '/scenic/1', label: '西湖', subLabel: '杭州·5A景区', rating: 4.8 },
-    { key: '/scenic/2', label: '拙政园', subLabel: '苏州·世界遗产', rating: 4.7 },
-    { key: '/scenic/3', label: '外滩', subLabel: '上海·标志性景观', rating: 4.6 },
-    { key: '/scenic/4', label: '乌镇', subLabel: '嘉兴·水乡古镇', rating: 4.5 },
-    { key: '/scenic/5', label: '上海迪士尼乐园', subLabel: '上海·主题乐园', rating: 4.7 },
-    { key: '/scenic/6', label: '东方明珠', subLabel: '上海·城市地标', rating: 4.5 },
-    { key: '/scenic/7', label: '普陀山', subLabel: '舟山·佛教圣地', rating: 4.8 },
-    { key: '/scenic/8', label: '中山陵', subLabel: '南京·革命景区', rating: 4.6 }
-  ];
 
   useEffect(() => {
     let ticking = false;
@@ -125,69 +75,7 @@ const Layout = ({ children }) => {
       key: '/scenic',
       icon: <CompassOutlined />,
       label: '景区',
-      children: [
-        {
-          key: 'scenic-all',
-          label: '全部景区',
-          onClick: () => { navigate('/scenic'); setMobileMenuOpen(false); }
-        },
-        {
-          type: 'divider'
-        },
-        {
-          key: 'scenic-city-title',
-          label: '城市快捷',
-          disabled: true,
-          style: { pointerEvents: 'none' }
-        },
-        ...cityQuickAccess.map(city => ({
-          key: city.key,
-          label: (
-            <span className="city-menu-item">
-              <span className="city-name">{city.label}</span>
-              <span className="city-sub">{city.subLabel}</span>
-            </span>
-          ),
-          onClick: () => { navigate(city.key); setMobileMenuOpen(false); }
-        })),
-        {
-          type: 'divider'
-        },
-        {
-          key: 'scenic-category-title',
-          label: '分类筛选',
-          disabled: true,
-          style: { pointerEvents: 'none' }
-        },
-        ...scenicCategories.map(cat => ({
-          key: cat.key,
-          label: cat.label,
-          icon: cat.icon,
-          onClick: () => { navigate(cat.key); setMobileMenuOpen(false); }
-        })),
-        {
-          type: 'divider'
-        },
-        {
-          key: 'scenic-popular-title',
-          label: '热门推荐',
-          disabled: true,
-          style: { pointerEvents: 'none' }
-        },
-        ...popularScenicSpots.map(spot => ({
-          key: spot.key,
-          label: (
-            <span className="popular-spot-item">
-              <span className="spot-name">{spot.label}</span>
-              <span className="spot-meta">
-                <span className="spot-sub">{spot.subLabel}</span>
-                <span className="spot-rating">⭐ {spot.rating}</span>
-              </span>
-            </span>
-          ),
-          onClick: () => { navigate(spot.key); setMobileMenuOpen(false); }
-        }))
-      ]
+      onClick: () => { navigate('/scenic'); setMobileMenuOpen(false); }
     },
     {
       key: '/hotels',

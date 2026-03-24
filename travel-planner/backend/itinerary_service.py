@@ -8,7 +8,10 @@ from datetime import datetime, date, timedelta
 from sqlalchemy.orm import Session
 import json
 import os
-from zhipuai import ZhipuAI
+try:
+    from zhipuai import ZhipuAI
+except ImportError:
+    ZhipuAI = None
 
 from enhanced_models import Attraction, City, Restaurant, Hotel, TransportMatrix
 from rule_engine import RuleEngine, ScheduleValidator

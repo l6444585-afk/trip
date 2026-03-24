@@ -16,15 +16,36 @@ export const INTEREST_OPTIONS = [
 ];
 
 /** 目的地选项配置 */
+// 按省份交叉排列，每页都有江苏/浙江/上海的城市混排
 export const DESTINATION_OPTIONS = [
-  { value: '杭州', label: '杭州', image: '/images/cities/hangzhou.jpg', tags: ['西湖', '灵隐寺', '宋城'], rating: 4.9, highlights: ['断桥残雪', '苏堤春晓', '雷峰夕照'] },
-  { value: '上海', label: '上海', image: '/images/cities/shanghai.jpg', tags: ['外滩', '迪士尼', '豫园'], rating: 4.8, highlights: ['外滩夜景', '迪士尼乐园', '城隍庙'] },
-  { value: '苏州', label: '苏州', image: '/images/cities/suzhou.jpg', tags: ['拙政园', '虎丘', '平江路'], rating: 4.9, highlights: ['拙政园', '留园', '平江路'] },
-  { value: '南京', label: '南京', image: '/images/cities/nanjing.jpg', tags: ['夫子庙', '中山陵', '玄武湖'], rating: 4.7, highlights: ['夫子庙', '中山陵', '玄武湖'] },
-  { value: '无锡', label: '无锡', image: '/images/cities/wuxi.jpg', tags: ['太湖', '灵山', '鼋头渚'], rating: 4.6, highlights: ['太湖风光', '灵山大佛', '鼋头渚'] },
-  { value: '宁波', label: '宁波', image: '/images/cities/ningbo.jpg', tags: ['天一阁', '东钱湖', '老外滩'], rating: 4.6, highlights: ['天一阁', '东钱湖', '老外滩'] },
-  { value: '嘉兴', label: '嘉兴', image: '/images/cities/jiaxing.jpg', tags: ['乌镇', '西塘', '南湖'], rating: 4.8, highlights: ['乌镇古镇', '西塘水乡', '南湖红船'] },
-  { value: '舟山', label: '舟山', image: '/images/cities/zhoushan.jpg', tags: ['普陀山', '朱家尖', '桃花岛'], rating: 4.8, highlights: ['普陀山', '朱家尖', '桃花岛'] }
+  // --- 第一页 9 个 ---
+  { value: '杭州', label: '杭州', province: '浙江', image: 'https://store.is.autonavi.com/showpic/046f7db069e380fdc29375807debee83', tags: ['西湖', '灵隐寺', '宋城'], rating: 4.9 },
+  { value: '上海', label: '上海', province: '上海', image: 'https://store.is.autonavi.com/showpic/4f83bd890aba5ab4f0d859e5e25a94f7', tags: ['外滩', '迪士尼', '豫园'], rating: 4.8 },
+  { value: '南京', label: '南京', province: '江苏', image: 'https://store.is.autonavi.com/showpic/46bf800a21c42453ff756fc2b77c710f', tags: ['夫子庙', '中山陵', '玄武湖'], rating: 4.7 },
+  { value: '宁波', label: '宁波', province: '浙江', image: 'https://aos-comment.amap.com/B0FFK2ZI40/comment/content_media_external_images_media_51005_ss__1757333679155_82960653.jpg', tags: ['天一阁', '东钱湖', '老外滩'], rating: 4.6 },
+  { value: '苏州', label: '苏州', province: '江苏', image: 'https://store.is.autonavi.com/showpic/72263ebfa1dfbeefe0269400e6ba822f', tags: ['拙政园', '虎丘', '平江路'], rating: 4.9 },
+  { value: '嘉兴', label: '嘉兴', province: '浙江', image: 'https://store.is.autonavi.com/showpic/60bcf8e04c9a3afe44d1ccadbf4877ef', tags: ['乌镇', '西塘', '南湖'], rating: 4.8 },
+  { value: '无锡', label: '无锡', province: '江苏', image: 'https://store.is.autonavi.com/showpic/10b6a3a2d937369d03593fc2f6cfd0b6', tags: ['太湖', '灵山', '鼋头渚'], rating: 4.6 },
+  { value: '舟山', label: '舟山', province: '浙江', image: 'https://store.is.autonavi.com/showpic/19e01764403658ced996b6c89cebb491', tags: ['普陀山', '朱家尖', '桃花岛'], rating: 4.8 },
+  { value: '扬州', label: '扬州', province: '江苏', image: 'https://store.is.autonavi.com/showpic/1cbe10d4552a9b079d65abfbfb0eff30', tags: ['瘦西湖', '个园', '东关街'], rating: 4.7 },
+  // --- 第二页 8 个 ---
+  { value: '绍兴', label: '绍兴', province: '浙江', image: 'https://store.is.autonavi.com/showpic/47f4c118a1671ef0e98d5b338aea08bb', tags: ['鲁迅故里', '沈园', '兰亭'], rating: 4.6 },
+  { value: '常州', label: '常州', province: '江苏', image: 'https://store.is.autonavi.com/showpic/30aaf96dbb2adbd9c4e3e665bfb2b90c', tags: ['恐龙园', '天目湖', '嬉戏谷'], rating: 4.6 },
+  { value: '湖州', label: '湖州', province: '浙江', image: 'https://store.is.autonavi.com/showpic/5bd366082ae4a2839e247ad6654aa4e6', tags: ['南浔古镇', '莫干山', '竹海'], rating: 4.5 },
+  { value: '镇江', label: '镇江', province: '江苏', image: 'https://store.is.autonavi.com/showpic/07cddee37de8f9d9aa5218e8b93b0d8f', tags: ['金山寺', '西津渡', '北固山'], rating: 4.5 },
+  { value: '金华', label: '金华', province: '浙江', image: 'https://store.is.autonavi.com/showpic/f02739a9205bc1948ac10df5bcb5e772', tags: ['横店影视城', '双龙洞', '八卦村'], rating: 4.5 },
+  { value: '南通', label: '南通', province: '江苏', image: 'https://store.is.autonavi.com/showpic/cf82a30a4b9ccc94bd4e0e0ddf983291', tags: ['濠河', '狼山', '博物苑'], rating: 4.4 },
+  { value: '温州', label: '温州', province: '浙江', image: 'https://store.is.autonavi.com/showpic/dd30681e6628bdd40fefc84e66d89b33', tags: ['雁荡山', '楠溪江', '江心屿'], rating: 4.6 },
+  { value: '台州', label: '台州', province: '浙江', image: 'https://store.is.autonavi.com/showpic/ef83f20b777be0753ee2a2290e872b22', tags: ['天台山', '神仙居', '临海古城'], rating: 4.5 },
+  // --- 第三页 8 个（补全全部地级市） ---
+  { value: '衢州', label: '衢州', province: '浙江', image: 'http://store.is.autonavi.com/showpic/31e371ab9c1face22e6c90c24b5b0009', tags: ['江郎山', '廿八都', '烂柯山'], rating: 4.4 },
+  { value: '泰州', label: '泰州', province: '江苏', image: 'http://store.is.autonavi.com/showpic/13a18b6b609a1ba875515d0fa2c144e5', tags: ['溱潼古镇', '凤城河', '梅兰芳故居'], rating: 4.3 },
+  { value: '丽水', label: '丽水', province: '浙江', image: 'http://store.is.autonavi.com/showpic/6f25bbc51c55c2846de18fa2af8ccd48', tags: ['缙云仙都', '古堰画乡', '云和梯田'], rating: 4.4 },
+  { value: '连云港', label: '连云港', province: '江苏', image: 'http://store.is.autonavi.com/showpic/5ff3272a8689ba525ad7308a496a0334', tags: ['花果山', '连岛', '海上云台山'], rating: 4.3 },
+  { value: '徐州', label: '徐州', province: '江苏', image: 'http://store.is.autonavi.com/showpic/21bca986aea70b805538f963305f2ecf', tags: ['云龙山', '汉文化景区', '窑湾古镇'], rating: 4.3 },
+  { value: '盐城', label: '盐城', province: '江苏', image: 'http://store.is.autonavi.com/showpic/5fd4bcd11cba194d8dff5ae017f2ad71', tags: ['丹顶鹤保护区', '大纵湖', '荷兰花海'], rating: 4.2 },
+  { value: '淮安', label: '淮安', province: '江苏', image: 'http://store.is.autonavi.com/showpic/c0d90947ba0320f92a5f4ed784f1b8b1', tags: ['周恩来故居', '洪泽湖', '里运河'], rating: 4.2 },
+  { value: '宿迁', label: '宿迁', province: '江苏', image: 'http://store.is.autonavi.com/showpic/86476fd30f495093f98bb2603a3f3f36', tags: ['项王故里', '三台山', '洋河酒厂'], rating: 4.1 },
 ];
 
 /** 同行人员选项 */

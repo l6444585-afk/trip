@@ -10,6 +10,7 @@ from datetime import datetime, date, timedelta
 from contextlib import asynccontextmanager
 import os
 import time
+import asyncio
 from pathlib import Path
 from collections import defaultdict
 from threading import Lock
@@ -24,7 +25,8 @@ from schemas import (
     ScheduleCreate, ScheduleResponse, ItineraryDetailResponse,
     ChatRequest, ChatResponse, AttractionResponse, CityResponse
 )
-from glm_service import GLMService
+from data.scenic_data import JIANGZHEHU_SCENIC_DATA
+from data.city_travel_db import generate_rich_itinerary
 from hybrid_ai_service import HybridItineraryService, IntentParser
 from user_profile_service import (
     UserProfileService, ProfileAwareItineraryService,
@@ -99,6 +101,14 @@ async def lifespan(app: FastAPI):
         init_scenic_data(db)
     finally:
         db.close()
+
+    print("🔗 检查第三方平台链接...")
+    try:
+        from scripts.check_platform_links import startup_check
+        startup_check()
+    except Exception as e:
+        print(f"⚠️ 平台链接检查失败（不影响启动）: {e}")
+
     yield
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
@@ -194,7 +204,53 @@ app.include_router(hotel_booking_router)
 app.include_router(share_router)
 app.include_router(scenic_router)
 
-glm_service = GLMService()
+
+
+def generate_local_itinerary(days, budget, departure, destinations, interests, companion_type, travel_style="精品深度"):
+    """用本地景点数据生成行程（GLM 不可用时的回退）"""
+    import random
+    dest_set = set(destinations) if destinations else set()
+    spots = [s for s in JIANGZHEHU_SCENIC_DATA if s["city"] in dest_set]
+    if not spots:
+        spots = [s for s in JIANGZHEHU_SCENIC_DATA if s["city"] in {"杭州", "上海", "苏州", "南京"}]
+    spots.sort(key=lambda s: s.get("popularity", 0), reverse=True)
+    per_day = 3
+    needed = days * per_day
+    selected = spots[:needed] if len(spots) >= needed else (spots * ((needed // len(spots)) + 1))[:needed]
+    random.shuffle(selected)
+    periods = ["morning", "afternoon", "evening"]
+    period_labels = {"morning": "上午", "afternoon": "下午", "evening": "晚上"}
+    daily_plans = []
+    for d in range(days):
+        day_spots = selected[d * per_day:(d + 1) * per_day]
+        plan = {"day": d + 1}
+        for i, period in enumerate(periods):
+            spot = day_spots[i] if i < len(day_spots) else day_spots[0]
+            plan[period] = {
+                "activity": f"游览{spot['name']}",
+                "name": spot["name"],
+                "location": spot.get("address", spot["city"]),
+                "latitude": spot.get("latitude"),
+                "longitude": spot.get("longitude"),
+                "tips": spot.get("tips", ""),
+                "duration": f"{spot.get('avg_visit_duration', 120)}分钟",
+            }
+        daily_plans.append(plan)
+    title = f"{departure} → {', '.join(destinations)} {days}日游"
+    return {
+        "itinerary": {
+            "title": title,
+            "days": days,
+            "budget": budget,
+            "departure": departure,
+            "destinations": destinations,
+            "companion_type": companion_type,
+            "travel_style": travel_style,
+            "daily_plans": daily_plans,
+        },
+        "source": "local_data",
+    }
+
 
 @app.get("/")
 async def root():
@@ -210,28 +266,18 @@ async def health_check():
 
 @app.get("/api/ai/health")
 async def ai_health_check():
-    """
-    检查AI服务（智谱API）的健康状态
-    
-    Returns:
-        Dict: 包含API状态、延迟、可用性等信息
-    """
-    health_status = await glm_service.health_check()
-    return health_status
+    return {
+        "status": "healthy",
+        "available": ai_travel_service.provider != "mock",
+        "provider": ai_travel_service.provider,
+        "message": f"AI 服务运行中（{ai_travel_service.provider}）"
+    }
 
 @app.get("/api/ai/status")
 async def ai_status():
-    """
-    获取AI服务状态（不执行实际API调用，使用缓存结果）
-    
-    Returns:
-        Dict: AI服务状态摘要
-    """
     return {
-        "available": glm_service.is_available,
-        "model": glm_service.model,
-        "last_health_check": glm_service._last_health_check,
-        "health_status": glm_service._health_status
+        "available": ai_travel_service.provider != "mock",
+        "provider": ai_travel_service.provider,
     }
 
 @app.post("/api/users/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -260,21 +306,13 @@ async def generate_itinerary(
     db: Session = Depends(get_db)
 ):
     try:
-        result = await glm_service.generate_itinerary(
-            days=itinerary.days,
-            budget=itinerary.budget,
-            departure=itinerary.departure,
-            companion_type=itinerary.companion_type,
-            interests=itinerary.interests,
-            destinations=itinerary.destinations,
+        result = generate_rich_itinerary(
+            days=itinerary.days, budget=itinerary.budget,
+            departure=itinerary.departure, destinations=itinerary.destinations or [],
+            interests=itinerary.interests, companion_type=itinerary.companion_type,
             travel_style=itinerary.travel_style,
-            travel_mode=itinerary.travel_mode,
-            age_group=itinerary.age_group,
-            pace_preference=itinerary.pace_preference,
-            special_needs=itinerary.special_needs,
-            date_range=itinerary.date_range
         )
-        
+
         itinerary_data = result.get("itinerary", {})
         
         new_itinerary = Itinerary(
@@ -294,37 +332,51 @@ async def generate_itinerary(
         daily_plans = itinerary_data.get("daily_plans", [])
         for plan in daily_plans:
             day_num = plan.get("day", 1)
-            
-            for period in ["morning", "afternoon", "evening"]:
-                period_data = plan.get(period)
-                if period_data:
-                    if isinstance(period_data, dict) and "activities" in period_data:
-                        activities = period_data.get("activities", [])
-                        if activities:
-                            first_activity = activities[0]
+
+            # 优先使用 schedule 数组（本地详细数据），否则用 morning/afternoon/evening
+            schedule_items = plan.get("schedule", [])
+            if schedule_items:
+                for item in schedule_items:
+                    schedule = Schedule(
+                        itinerary_id=new_itinerary.id,
+                        day=day_num,
+                        period=item.get("time", "09:00"),
+                        activity=item.get("activity", ""),
+                        location=plan.get("city", ""),
+                        notes=item.get("detail", ""),
+                    )
+                    db.add(schedule)
+            else:
+                for period in ["morning", "afternoon", "evening"]:
+                    period_data = plan.get(period)
+                    if period_data:
+                        if isinstance(period_data, dict) and "activities" in period_data:
+                            activities = period_data.get("activities", [])
+                            if activities:
+                                first_activity = activities[0]
+                                schedule = Schedule(
+                                    itinerary_id=new_itinerary.id,
+                                    day=day_num,
+                                    period=period,
+                                    activity=first_activity.get("name", ""),
+                                    location=first_activity.get("location", ""),
+                                    latitude=first_activity.get("latitude"),
+                                    longitude=first_activity.get("longitude"),
+                                    notes=first_activity.get("tips", "")
+                                )
+                                db.add(schedule)
+                        else:
                             schedule = Schedule(
                                 itinerary_id=new_itinerary.id,
                                 day=day_num,
                                 period=period,
-                                activity=first_activity.get("name", ""),
-                                location=first_activity.get("location", ""),
-                                latitude=first_activity.get("latitude"),
-                                longitude=first_activity.get("longitude"),
-                                notes=first_activity.get("tips", "")
+                                activity=period_data.get("activity", period_data.get("name", "")),
+                                location=period_data.get("location", ""),
+                                latitude=period_data.get("latitude"),
+                                longitude=period_data.get("longitude"),
+                                notes=period_data.get("tips", "")
                             )
                             db.add(schedule)
-                    else:
-                        schedule = Schedule(
-                            itinerary_id=new_itinerary.id,
-                            day=day_num,
-                            period=period,
-                            activity=period_data.get("activity", period_data.get("name", "")),
-                            location=period_data.get("location", ""),
-                            latitude=period_data.get("latitude"),
-                            longitude=period_data.get("longitude"),
-                            notes=period_data.get("tips", "")
-                        )
-                        db.add(schedule)
         
         db.commit()
         
@@ -344,28 +396,40 @@ async def generate_multiple_itineraries(
     db: Session = Depends(get_db)
 ):
     try:
-        result = await glm_service.generate_multiple_itineraries(
-            days=itinerary.days,
-            budget=itinerary.budget,
-            departure=itinerary.departure,
-            companion_type=itinerary.companion_type,
-            interests=itinerary.interests,
-            destinations=itinerary.destinations,
-            travel_style=itinerary.travel_style,
-            travel_mode=itinerary.travel_mode,
-            age_group=itinerary.age_group,
-            pace_preference=itinerary.pace_preference,
-            special_needs=itinerary.special_needs,
-            date_range=itinerary.date_range
-        )
-        
+        styles = [
+            ("省钱版", "经济实惠"),
+            ("轻松版", "休闲度假"),
+            ("深度体验版", "精品深度"),
+        ]
+        plans = {}
+        comparison = []
+        for key_suffix, (label, style) in zip(["plan_a", "plan_b", "plan_c"], styles):
+            result = generate_rich_itinerary(
+                days=itinerary.days, budget=itinerary.budget,
+                departure=itinerary.departure,
+                destinations=itinerary.destinations or [],
+                interests=itinerary.interests,
+                companion_type=itinerary.companion_type,
+                travel_style=style,
+            )
+            plan_data = result.get("itinerary", {})
+            plan_data["title"] = f"{label}行程"
+            plan_data["focus"] = label
+            plans[key_suffix] = plan_data
+            comparison.append({
+                "plan": f"方案{'ABC'['abc'.index(key_suffix[-1])]}：{label}",
+                "total_cost": plan_data.get("total_budget_estimate", {}).get("total", 0),
+                "highlights": [dp.get("theme", "") for dp in plan_data.get("daily_plans", [])[:2]],
+                "best_for": label
+            })
+
         return {
-            "plans_comparison": result.get("plans_comparison", {}),
-            "plans": result.get("plans", {}),
-            "recommendation": result.get("recommendation", {}),
+            "plans_comparison": {"summary_table": comparison},
+            "plans": plans,
+            "recommendation": {"default_choice": "方案B", "reason": "节奏适中，适合大多数人"},
             "message": "多方案生成成功"
         }
-        
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"多方案生成失败: {str(e)}")
 
@@ -463,12 +527,10 @@ async def chat(request: ChatRequest, db: Session = Depends(get_db)):
                 for s in schedules:
                     context += f"第{s.day}天{s.period}：{s.activity} - {s.location}\n"
         
-        answer = await glm_service.chat_with_context(
-            question=request.question,
-            context=context,
-            chat_history=request.chat_history
-        )
-        
+        prompt = f"基于以下行程信息回答问题：\n{context}\n\n用户问题：{request.question}" if context else request.question
+        result = await ai_travel_service.chat(user_id="chat_user", message=prompt)
+        answer = result.get("content", "暂时无法回答，请稍后再试。")
+
         return ChatResponse(answer=answer)
         
     except Exception as e:
@@ -622,7 +684,7 @@ async def share_itinerary(
         
         import uuid
         share_id = str(uuid.uuid4())
-        share_link = f"{os.getenv('FRONTEND_URL', 'http://localhost:3000')}/shared/{share_id}"
+        share_link = f"{os.getenv('FRONTEND_URL', 'http://localhost:3890')}/shared/{share_id}"
         
         return {
             "share_id": share_id,
@@ -1697,4 +1759,4 @@ async def get_ai_travel_context(user_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8891)

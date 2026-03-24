@@ -46,7 +46,7 @@ class SharedItinerary:
 
 class ShareService:
     def __init__(self):
-        self.base_url = "http://localhost:3000/share"
+        self.base_url = "http://localhost:3890/share"
         self.share_cache: Dict[str, Dict[str, Any]] = {}
     
     def generate_share_code(self, itinerary_id: int, user_id: int) -> str:

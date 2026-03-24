@@ -62,7 +62,7 @@ class GLMService:
     def __init__(self):
         self.api_key = os.getenv("GLM_API_KEY")
         self.model = os.getenv("GLM_MODEL", "glm-4-flash")
-        self.timeout = int(os.getenv("GLM_TIMEOUT", "60"))
+        self.timeout = int(os.getenv("GLM_TIMEOUT", "25"))
         
         if not self.api_key:
             logger.warning("[GLMService] GLM_API_KEY 未配置，AI服务将不可用")
@@ -149,7 +149,7 @@ class GLMService:
         
         return self._health_status
     
-    @retry_on_failure(max_retries=3, delay=1.0, backoff=2.0)
+    @retry_on_failure(max_retries=0, delay=1.0, backoff=2.0)
     async def _call_api(self, messages: List[Dict], temperature: float = 0.7, max_tokens: int = 4000) -> str:
         """
         调用智谱API，带重试机制
@@ -179,7 +179,7 @@ class GLMService:
         
         return response.choices[0].message.content
     
-    @retry_on_failure(max_retries=2, delay=2.0, backoff=2.0)
+    @retry_on_failure(max_retries=0, delay=1.0, backoff=1.0)
     async def generate_itinerary(
         self,
         days: int,

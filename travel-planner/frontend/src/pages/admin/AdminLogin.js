@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, message, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { adminAuthService } from '../../services/adminApi';
@@ -12,7 +12,7 @@ const AdminLogin = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const result = await adminAuthService.login(values.username, values.password);
+      await adminAuthService.login(values.username, values.password);
       message.success('登录成功');
       navigate('/admin');
     } catch (error) {
@@ -24,20 +24,35 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="admin-login-container">
-      <div className="login-background">
-        <div className="login-shape shape-1"></div>
-        <div className="login-shape shape-2"></div>
-        <div className="login-shape shape-3"></div>
-      </div>
-      
-      <Card className="login-card">
-        <div className="login-header">
-          <div className="login-logo">
-            <div className="logo-icon">江</div>
+    <div className="admin-login">
+      <div className="login-brand">
+        <div className="brand-content">
+          <div className="brand-icon">旅</div>
+          <h1 className="brand-title">江浙沪旅游管理系统</h1>
+          <p className="brand-desc">
+            一站式旅游行程管理平台，提供景点管理、行程规划、订单跟踪、数据分析等功能
+          </p>
+          <div className="brand-features">
+            <div className="brand-feature">
+              <span className="brand-feature-dot" />
+              智能行程规划与 AI 推荐
+            </div>
+            <div className="brand-feature">
+              <span className="brand-feature-dot" />
+              实时数据分析与运营看板
+            </div>
+            <div className="brand-feature">
+              <span className="brand-feature-dot" />
+              多角色权限管理体系
+            </div>
           </div>
-          <h1 className="login-title">江浙沪旅游管理系统</h1>
-          <p className="login-subtitle">管理后台登录</p>
+        </div>
+      </div>
+
+      <div className="login-form-panel">
+        <div className="login-form-header">
+          <h2>管理后台登录</h2>
+          <p>请输入您的管理员账号和密码</p>
         </div>
 
         <Form
@@ -46,6 +61,7 @@ const AdminLogin = () => {
           autoComplete="off"
           size="large"
           initialValues={{ remember: true }}
+          layout="vertical"
         >
           <Form.Item
             name="username"
@@ -71,7 +87,7 @@ const AdminLogin = () => {
 
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>记住我</Checkbox>
+              <Checkbox>7 天内自动登录</Checkbox>
             </Form.Item>
           </Form.Item>
 
@@ -81,7 +97,7 @@ const AdminLogin = () => {
               htmlType="submit"
               loading={loading}
               block
-              className="login-button"
+              className="login-submit-btn"
             >
               登录
             </Button>
@@ -89,10 +105,15 @@ const AdminLogin = () => {
         </Form>
 
         <div className="login-footer">
-          <p>默认管理员账户: admin / admin123</p>
-          <p className="copyright">© 2024 江浙沪旅游行程规划系统</p>
+          <span className="login-footer-hint">
+            默认管理员账户: admin / admin123
+          </span>
         </div>
-      </Card>
+
+        <p className="login-copyright">
+          江浙沪旅游行程规划系统
+        </p>
+      </div>
     </div>
   );
 };
