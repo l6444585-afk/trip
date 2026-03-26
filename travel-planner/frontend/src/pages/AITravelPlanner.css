@@ -1,0 +1,76 @@
+/* AI 智能规划页 - 响应式补丁 */
+
+/* ── 笔记本 (≤1366px) ── */
+@media (max-width: 1400px) {
+  .ai-planner h2.ant-typography {
+    font-size: 22px !important;
+  }
+}
+
+/* ── 平板 (≤992px) ── */
+@media (max-width: 992px) {
+  .ai-planner .ai-planner-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .ai-planner .ai-planner-header .ant-space {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* ── 手机 (≤767px) ── */
+@media (max-width: 767px) {
+  .ai-planner {
+    padding: 0 4px !important;
+  }
+
+  .ai-planner h2.ant-typography {
+    font-size: 18px !important;
+  }
+
+  .ai-planner .ant-card-body {
+    padding: 8px !important;
+  }
+
+  /* 聊天气泡 */
+  .ai-planner .ai-msg-bubble {
+    max-width: 90% !important;
+    font-size: 14px !important;
+  }
+
+  /* 输入区域 */
+  .ai-planner .ant-space-compact {
+    flex-direction: column !important;
+    gap: 8px;
+  }
+
+  .ai-planner .ant-space-compact .ant-btn {
+    width: 100% !important;
+    border-radius: 8px !important;
+  }
+
+  .ai-planner .ant-space-compact .ant-input {
+    border-radius: 8px !important;
+  }
+
+  /* 右侧面板在手机端隐藏滚动条 */
+  .ai-planner .ant-col-lg-6 {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+/* ── 小屏手机 (≤480px) ── */
+@media (max-width: 480px) {
+  .ai-planner h2.ant-typography {
+    font-size: 16px !important;
+    gap: 8px !important;
+  }
+
+  .ai-planner .ant-typography p {
+    font-size: 12px !important;
+  }
+}

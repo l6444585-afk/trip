@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import AIAccounting from '../components/AIAccounting';
 import '../styles/hero-title.css';
+import './Home.css';
 
 
 const { Title, Paragraph, Text } = Typography;
@@ -458,7 +459,7 @@ const Home = () => {
   const remainingBudget = budget.total - totalAllocated;
 
   return (
-    <div className="fade-in">
+    <div className="fade-in home-page">
       <style>{`
         @keyframes gradientMove {
           0% { background-position: 0% 50%; }
@@ -482,13 +483,14 @@ const Home = () => {
         }
       `}</style>
 
-      <div style={{ marginBottom: 60 }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 32, position: 'relative' }}>
+      <div className="home-section" style={{ marginBottom: 60 }}>
+        <div className="home-header-row" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 32, position: 'relative', flexWrap: 'wrap', gap: 12 }}>
           <Title level={2} style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>
             热门目的地
           </Title>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginLeft: 16 }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <Input
+              className="home-search-bar"
               placeholder="搜索目的地..."
               prefix={<SearchOutlined />}
               value={searchText}
@@ -499,7 +501,7 @@ const Home = () => {
             <Tag color="red" icon={<FireOutlined />}>实时热度</Tag>
           </div>
         </div>
-        <div style={{
+        <div className="home-dest-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '24px'

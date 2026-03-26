@@ -594,6 +594,21 @@
   }
 }
 
+@media (max-width: 992px) {
+  .admin-sider {
+    width: 200px !important;
+    min-width: 200px !important;
+  }
+
+  .admin-content {
+    padding: 20px;
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-content {
     padding: 16px;

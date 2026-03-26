@@ -4,6 +4,7 @@ import { RocketOutlined, ThunderboltOutlined, EnvironmentOutlined, DollarOutline
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import '../styles/design-system.css';
+import './AITravelPlanner.css';
 
 const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
@@ -423,9 +424,9 @@ const AITravelPlanner = () => {
   };
 
   return (
-    <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="fade-in ai-planner" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ marginBottom: 16 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="ai-planner-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <Title level={2} style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
               <RobotOutlined style={{ color: '#1A936F' }} />

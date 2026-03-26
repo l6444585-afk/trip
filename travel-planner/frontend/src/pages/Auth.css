@@ -277,11 +277,22 @@
   color: #f44336;
 }
 
+@media (max-width: 992px) {
+  .auth-card {
+    max-width: 420px;
+    padding: 32px;
+  }
+
+  .auth-title {
+    font-size: 24px;
+  }
+}
+
 @media (max-width: 768px) {
   .auth-content {
     padding: 16px;
   }
-  
+
   .auth-card {
     padding: 28px;
     border-radius: 16px;
