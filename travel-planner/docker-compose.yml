@@ -2,6 +2,7 @@ name: trip
 
 services:
   backend:
+    platform: linux/amd64
     build: ./backend
     container_name: trip-backend
     ports:
@@ -24,12 +25,14 @@ services:
       retries: 3
 
   redis:
+    platform: linux/amd64
     image: redis:7-alpine
     container_name: trip-redis
     networks:
       - trip-network
 
   frontend:
+    platform: linux/amd64
     build: ./frontend
     container_name: trip-frontend
     ports:
