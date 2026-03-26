@@ -6,9 +6,9 @@
 
 /* ===== Header ===== */
 .scenic-header {
-  background: linear-gradient(135deg, #1a936f 0%, #114b5f 100%);
+  background: linear-gradient(180deg, #eaf7f0 0%, #f5f1ed 100%);
   padding: 48px 24px 72px;
-  color: white;
+  color: #1f2937;
   position: relative;
   overflow: hidden;
 }
@@ -21,7 +21,7 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(26, 147, 111, 0.04);
   pointer-events: none;
 }
 
@@ -33,7 +33,7 @@
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(26, 147, 111, 0.05);
   pointer-events: none;
 }
 
@@ -42,19 +42,56 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  text-align: center;
 }
 
+.scenic-header-content h2,
+.scenic-header-content .ant-typography {
+  text-align: center;
+}
 .scenic-header-content h2 {
-  color: white !important;
-  margin-bottom: 8px !important;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  margin-bottom: 12px !important;
+  font-size: clamp(2.5rem, 6vw, 3.25rem) !important;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Serif SC', serif;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em;
+  background: linear-gradient(
+    135deg,
+    #1B5E20 0%,
+    #2E8B57 20%,
+    #4CAF50 40%,
+    #66BB6A 50%,
+    #4CAF50 60%,
+    #2E8B57 80%,
+    #1B5E20 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientFlow 6s ease infinite;
+  filter: drop-shadow(0 4px 12px rgba(46, 139, 87, 0.2));
+}
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .scenic-header-content .ant-typography {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 15px;
+  color: #6b7280;
+  font-size: clamp(0.9375rem, 2vw, 1.125rem);
+}
+
+/* 标题 Logo */
+.scenic-title-logo {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+.scenic-title-logo .logo-container {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ===== 筛选器 ===== */

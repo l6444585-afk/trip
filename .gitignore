@@ -1,0 +1,6 @@
+
+# OMC plugin cache
+.omc/
+
+# Oracle JDK
+oracleJdk-25.jdk/

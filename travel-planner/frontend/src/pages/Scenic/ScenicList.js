@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import Logo from '../../components/Logo';
 import './ScenicList.css';
 
 const { Search } = Input;
@@ -301,7 +302,7 @@ const ScenicList = () => {
       <div className="scenic-header">
         <div className="scenic-header-content">
           <Title level={2}>
-            <CompassOutlined style={{ marginRight: 8 }} />
+            <span className="scenic-title-logo"><Logo size="large" showText={false} /></span>
             江浙沪景区
           </Title>
           <Text>
