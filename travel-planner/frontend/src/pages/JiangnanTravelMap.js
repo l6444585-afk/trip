@@ -136,7 +136,7 @@ const JiangnanTravelMap = () => {
     try {
       setLoading(true);
       const res = await axios.get('/api/scenic-spots/', {
-        params: { page_size: 200, sort_by: 'rating', sort_order: 'desc' }
+        params: { page_size: 50, sort_by: 'rating', sort_order: 'desc' }
       });
       if (res.data?.success && res.data.data?.length > 0) {
         setSpots(applyCache(res.data.data));
@@ -158,49 +158,47 @@ const JiangnanTravelMap = () => {
 
   useEffect(() => { fetchSpots(); }, [fetchSpots]);
 
-  /* ═══════════ 高德 PlaceSearch 拉取官方照片 ═══════════ */
+  /* ═══════════ PlaceSearch 补图（仅 fallback 数据需要） ═══════════ */
   useEffect(() => {
     if (!mapReady || spots.length === 0 || photoFetchedRef.current) return;
+    const noImage = spots.filter(s => !s.image_url || s.image_url.startsWith('/images/'));
+    if (noImage.length === 0) return;
     photoFetchedRef.current = true;
 
     const AMap = amapRef.current;
     if (!AMap) return;
 
     const cache = loadPhotoCache();
-    const need = spots.filter(s => !cache[s.name]);
-    if (need.length === 0) return;
+    const need = noImage.filter(s => !cache[s.name]);
+    if (need.length === 0) {
+      setSpots(prev => prev.map(s => ({
+        ...s, image_url: s.image_url || cache[s.name] || s.image_url,
+      })));
+      return;
+    }
 
     AMap.plugin('AMap.PlaceSearch', () => {
       const ps = new AMap.PlaceSearch({ pageSize: 1, extensions: 'all' });
-
       const run = async () => {
         const fresh = {};
         for (let i = 0; i < need.length; i++) {
-          const spot = need[i];
           await new Promise(resolve => {
-            ps.search(`${spot.city} ${spot.name}`, (status, result) => {
-              if (status === 'complete' && result.poiList?.pois?.length > 0) {
-                const photos = result.poiList.pois[0].photos;
-                if (photos?.length > 0) {
-                  fresh[spot.name] = photos[0].url;
-                }
+            ps.search(`${need[i].city} ${need[i].name}`, (status, result) => {
+              if (status === 'complete' && result.poiList?.pois?.[0]?.photos?.length > 0) {
+                fresh[need[i].name] = result.poiList.pois[0].photos[0].url;
               }
               resolve();
             });
           });
           if (i % 5 === 4) await new Promise(r => setTimeout(r, 200));
         }
-
-        if (Object.keys(fresh).length === 0) return;
-        const merged = { ...cache, ...fresh };
-        savePhotoCache(merged);
-
-        setSpots(prev => prev.map(s => ({
-          ...s,
-          image_url: fresh[s.name] || s.image_url,
-        })));
+        if (Object.keys(fresh).length > 0) {
+          savePhotoCache({ ...cache, ...fresh });
+          setSpots(prev => prev.map(s => ({
+            ...s, image_url: fresh[s.name] || s.image_url,
+          })));
+        }
       };
-
       run();
     });
   }, [mapReady, spots]);
