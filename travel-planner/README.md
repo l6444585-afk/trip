@@ -93,54 +93,86 @@ docker-compose logs -f
 
 ### 方式二：本地开发模式
 
-#### 后端启动
+#### Windows 启动方式
 
-1. **安装依赖**
-```bash
-cd backend
+**第一步：启动后端服务**
+
+打开命令行窗口（CMD 或 PowerShell），执行：
+```cmd
+cd /d D:\Trae\trip\travel-planner\backend
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
+python main.py
 ```
 
-2. **配置环境变量**
-```bash
-cp .env.example .env
-```
+> 注：`python -m venv venv` 和 `pip install` 只需首次执行一次，之后启动只需：
+> ```cmd
+> cd /d D:\Trae\trip\travel-planner\backend
+> venv\Scripts\activate
+> python main.py
+> ```
 
-编辑 `.env` 文件，填入您的 API 密钥：
-```env
-GLM_API_KEY=your_api_key_here
-DATABASE_URL=sqlite:///./travel_planner.db
-AMAP_API_KEY=your_amap_api_key_here
-FRONTEND_URL=http://localhost:3000
-SECRET_KEY=your-secret-key-here-change-this-in-production
-```
+**第二步：启动前端服务**
 
-3. **启动后端服务**
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+打开**另一个**命令行窗口，执行：
 
-#### 前端启动
-
-1. **安装依赖**
-```bash
-cd frontend
+首次安装依赖（CMD）：
+```cmd
+cd /d D:\Trae\trip\travel-planner\frontend
 npm install
-```
-
-2. **配置环境变量**
-编辑 `frontend/.env` 文件：
-```env
-REACT_APP_AMAP_KEY=your_amap_api_key_here
-```
-
-3. **启动前端服务**
-```bash
 npm start
 ```
 
-4. **访问应用**
-打开浏览器访问 http://localhost:3000
+首次安装依赖（PowerShell）：
+```powershell
+cd D:\Trae\trip\travel-planner\frontend
+npm install
+npm start
+```
+
+> 如果 `npm install` 报错，先清理 node_modules 再重装：
+> - **CMD**：`rd /s /q node_modules` 然后 `npm install`
+> - **PowerShell**：`Remove-Item -Recurse -Force node_modules` 然后 `npm install`
+
+之后每次启动只需：
+```cmd
+cd /d D:\Trae\trip\travel-planner\frontend
+npm start
+```
+
+#### Mac 启动方式
+
+**终端 1 - 后端：**
+```bash
+cd ~/Projects/trip/travel-planner/backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
+
+**终端 2 - 前端：**
+```bash
+cd ~/Projects/trip/travel-planner/frontend
+npm install
+npm start
+```
+
+#### 访问应用
+- 前端: http://localhost:3000
+- 后端 API: http://localhost:8000
+- API 文档: http://localhost:8000/docs
+
+#### Windows 首次部署注意事项
+1. 需安装 Python 3.11+、Node.js 18+
+2. 把 `.env` 文件放到 `travel-planner/` 根目录（含 API 密钥）
+3. Redis 连接失败是正常的，系统会自动切换内存缓存，功能不受影响
+4. SQLite 数据库文件自动创建，无需额外配置
+5. venv 虚拟环境不能跨平台复制，Windows 和 Mac 需各自创建
+6. `npm install` 报错时，先清理 node_modules 再重装：
+   - **CMD**：`rd /s /q node_modules` 然后 `npm install`
+   - **PowerShell**：`Remove-Item -Recurse -Force node_modules` 然后 `npm install`
 
 ## API 配置说明
 
