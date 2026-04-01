@@ -5,8 +5,8 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR}/travel_planner.db")
-ENHANCED_DATABASE_URL = os.getenv("ENHANCED_DATABASE_URL", f"sqlite:///{BASE_DIR}/travel_planner_enhanced.db")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR.as_posix()}/travel_planner.db")
+ENHANCED_DATABASE_URL = os.getenv("ENHANCED_DATABASE_URL", f"sqlite:///{BASE_DIR.as_posix()}/travel_planner_enhanced.db")
 
 engine = create_engine(
     DATABASE_URL, 

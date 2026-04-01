@@ -24,7 +24,7 @@ import type {
 } from '../types';
 
 // API基础配置
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || '';
 
 // 创建axios实例
 const apiClient = axios.create({
