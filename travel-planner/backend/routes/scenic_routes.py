@@ -81,7 +81,6 @@ def _build_platform_links(name, raw_links):
             links[platform] = {
                 "name": info["name"],
                 "url": info["search_url"].format(keyword=name),
-                "icon": info["icon"]
             }
     return links
 

@@ -57,7 +57,7 @@ npm start
 ```
 前端启动在 http://localhost:3000
 
-> **注意**: 手动启动时前端 proxy 指向 8890（Docker），需改 `frontend/package.json` 的 proxy 为 `http://localhost:8000`。
+> **注意**: 前端通过 `src/setupProxy.js` 自动代理 API 请求。手动启动默认指向 `localhost:8000`，Docker 模式通过环境变量 `REACT_APP_BACKEND_URL=http://backend:8000` 指向容器内后端，无需手动切换。
 
 ### Windows 首次部署注意事项
 
@@ -98,6 +98,18 @@ npm start
 2. **流程走查** — 每次改完功能，MUST 从首页开始走一遍完整用户路径，不能只测改动的那个页面
 3. **跨平台验证** — Mac 能跑不够，MUST 确保 Windows、Docker、手机端体验一致
 4. **培养 taste** — 如果将来要做产品，一开始就要培养对用户体验的品味。不只是"能用"，要"好用"
+
+### 论文图表生成（永久生效）
+- 工具：next-ai-draw-io (https://next-ai-drawio.jiang.jp/zh) + 豆包 Doubao-Seed-2.0-pro
+- 图表描述文件：`论文图表/*.md`，可直接上传到工具的"文档转图表"功能
+- 也可上传参考论文截图，用"复制流程图"复刻风格再改内容
+- **风格铁律：纯黑白，零颜色，标准UML/Chen记法，学术论文风格**
+- 导出 PNG（300dpi）插入 Word
+
+### Git 推送规则（永久生效）
+- 每次推送 MUST 同时推 `main` 和 `develop` 两个分支
+- 推送前检查两分支是否同步，有差异先合并
+- 命令：`git push origin main && git push origin develop`
 
 ## 环境变量（.env）
 
