@@ -59,12 +59,24 @@ npm start
 
 > **注意**: 前端通过 `src/setupProxy.js` 自动代理 API 请求。手动启动默认指向 `localhost:8000`，Docker 模式通过环境变量 `REACT_APP_BACKEND_URL=http://backend:8000` 指向容器内后端，无需手动切换。
 
-### Windows 首次部署注意事项
+### Windows 答辩环境（铁律，每次改动 MUST 检查）
 
-1. 安装 Python 3.11+、Node.js 18+、OrbStack（或 Docker Desktop）
+**用户用 Windows 笔记本答辩，Mac mini 只是开发机。Mac 能跑不算完成，Windows 能跑才算完成。**
+
+每次修改代码后 MUST 自问：
+1. **端口** — Windows 手动模式(8000/3000) 和 Docker 模式(8890/3890) 都能连通吗？
+2. **路径** — 有没有用 Mac 特有路径（`/usr/local`、`~/.config`）？Windows 用 `\` 分隔符能跑吗？
+3. **依赖** — 新加的 npm/pip 包在 Windows 上能装吗？有没有 C 编译依赖？
+4. **环境变量** — `.env` 文件齐全吗？Windows cmd/PowerShell 下加载方式一样吗？
+5. **API** — 所有 API 端点在 Windows 环境下实际能返回数据吗？不要只看 Mac 本地
+
+Windows 首次部署清单：
+1. 安装 Python 3.11+、Node.js 18+、Docker Desktop
 2. 把 `.env` 文件放到 `travel-planner/` 根目录（含 GLM_API_KEY）
 3. `redis` 依赖在 requirements.txt 中但非必需，Windows 下安装失败可忽略
 4. SQLite 数据库文件自动创建，无需额外配置
+5. 手动模式：先启动后端 `python main.py`（端口8000），再 `npm start`（端口3000），proxy 自动指向 8000
+6. Docker 模式：`docker compose up -d --build`，前端 3890，后端 8890
 
 ## 关键架构决策
 

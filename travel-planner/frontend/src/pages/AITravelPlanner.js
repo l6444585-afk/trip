@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Card, Input, Button, message, Space, Row, Col, Typography, Divider, Tag, Rate, Modal, Badge, Spin, Alert, Collapse, Checkbox, Select, InputNumber, Tooltip, Avatar, List, Drawer, Form, Popconfirm, Empty } from 'antd';
 import { RocketOutlined, ThunderboltOutlined, EnvironmentOutlined, DollarOutlined, CameraOutlined, CoffeeOutlined, CompassOutlined, SafetyOutlined, TeamOutlined, ClockCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined, SendOutlined, ReloadOutlined, SaveOutlined, BulbOutlined, FireOutlined, StarOutlined, RobotOutlined, AimOutlined, TrophyOutlined, MessageOutlined, EyeOutlined, DeleteOutlined, HistoryOutlined, SettingOutlined, ExportOutlined, CopyOutlined, HeartOutlined, HeartFilled, InfoCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import '../styles/design-system.css';
 import './AITravelPlanner.css';
@@ -10,8 +11,6 @@ const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
 const { Option } = Select;
 const { TextArea } = Input;
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
 
 const AITravelPlanner = () => {
   const [chatMessages, setChatMessages] = useState([]);
@@ -100,8 +99,7 @@ const AITravelPlanner = () => {
 
   const loadChatHistory = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/ai-travel/history/${userId}`);
-      const data = await response.json();
+      const { data } = await axios.get(`/api/ai-travel/history/${userId}`);
       if (data.success && data.history) {
         setChatMessages(data.history);
         setContext(data.context || {});
@@ -133,18 +131,12 @@ const AITravelPlanner = () => {
     setStreamingContent('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/ai-travel/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId,
-          message: userInput,
-          stream: false
-        })
+      const { data } = await axios.post('/api/ai-travel/chat', {
+        user_id: userId,
+        message: userInput,
+        stream: false
       });
 
-      const data = await response.json();
-      
       if (data.success) {
         const aiMessage = {
           role: 'assistant',
@@ -153,7 +145,7 @@ const AITravelPlanner = () => {
         };
         setChatMessages(prev => [...prev, aiMessage]);
         setContext(data.context || {});
-        
+
         if (data.reply.includes('```json') || data.reply.includes('"itinerary"')) {
           tryExtractItinerary(data.reply);
         }
@@ -188,7 +180,7 @@ const AITravelPlanner = () => {
     setStreamingContent('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/ai-travel/chat`, {
+      const response = await fetch('/api/ai-travel/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -278,17 +270,11 @@ const AITravelPlanner = () => {
     }]);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/ai-travel/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId,
-          ...values
-        })
+      const { data } = await axios.post('/api/ai-travel/generate', {
+        user_id: userId,
+        ...values
       });
 
-      const data = await response.json();
-      
       if (data.success && data.itinerary) {
         setGeneratedItinerary(data.itinerary);
         setShowResultModal(true);
@@ -308,7 +294,7 @@ const AITravelPlanner = () => {
 
   const handleClearSession = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/ai-travel/session/${userId}`, { method: 'DELETE' });
+      await axios.delete(`/api/ai-travel/session/${userId}`);
       setChatMessages([]);
       setContext({});
       message.success('对话已重置');

@@ -117,7 +117,7 @@ const ItineraryDetail = () => {
   const handleUpdate = async (values) => {
     try {
       await axios.put(`${API_ENDPOINTS.ITINERARIES}/${id}`, {
-        ...values, companion_type: itinerary.companion_type, interests: itinerary.interests.split(','),
+        ...values, companion_type: itinerary.companion_type, interests: Array.isArray(itinerary.interests) ? itinerary.interests : (itinerary.interests ? itinerary.interests.split(',') : []),
       });
       message.success('更新成功');
       setEditModalVisible(false);
@@ -161,7 +161,7 @@ const ItineraryDetail = () => {
       return { bg: '#ede9fe', color: '#7c3aed' };
     };
     const totalActivities = itinerary.schedules ? itinerary.schedules.length : 0;
-    const interests = itinerary.interests ? itinerary.interests.split(',') : [];
+    const interests = Array.isArray(itinerary.interests) ? itinerary.interests : (itinerary.interests ? itinerary.interests.split(',') : []);
 
     let daysHtml = '';
     Object.keys(grouped).sort((a, b) => a - b).forEach(day => {
@@ -362,7 +362,7 @@ const ItineraryDetail = () => {
     return <div className="proto-detail"><div className="loading-center">行程不存在</div></div>;
   }
 
-  const interests = itinerary.interests ? itinerary.interests.split(',') : [];
+  const interests = Array.isArray(itinerary.interests) ? itinerary.interests : (itinerary.interests ? itinerary.interests.split(',') : []);
   const groupedSchedules = groupSchedulesByDay(itinerary.schedules);
 
   return (

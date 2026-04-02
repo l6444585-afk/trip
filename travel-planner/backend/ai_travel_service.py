@@ -320,8 +320,11 @@ class AITravelService:
             if response.status_code != 200:
                 raise Exception(f"Doubao API returned status {response.status_code}: {response.text}")
             data = response.json()
+            choices = data.get("choices", [])
+            if not choices:
+                raise Exception("Doubao API returned empty choices")
             return {
-                "content": data["choices"][0]["message"]["content"],
+                "content": choices[0]["message"]["content"],
                 "usage": data.get("usage", {})
             }
 
@@ -335,6 +338,8 @@ class AITravelService:
                 max_tokens=self.max_tokens
             )
             
+            if not response.choices:
+                raise Exception("ZhipuAI API returned empty choices")
             return {
                 "content": response.choices[0].message.content,
                 "usage": {
@@ -371,9 +376,11 @@ class AITravelService:
                 raise Exception(f"API returned status {response.status_code}: {response.text}")
             
             data = response.json()
-            
+            choices = data.get("choices", [])
+            if not choices:
+                raise Exception("SiliconFlow API returned empty choices")
             return {
-                "content": data["choices"][0]["message"]["content"],
+                "content": choices[0]["message"]["content"],
                 "usage": data.get("usage", {})
             }
     
