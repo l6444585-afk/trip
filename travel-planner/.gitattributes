@@ -1,0 +1,28 @@
+# 确保 Windows 批处理脚本始终使用 CRLF 行尾
+*.bat text eol=crlf
+
+# 前端/后端源码使用 LF（跨平台一致）
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# 二进制文件不做行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.db binary
+*.sqlite binary
