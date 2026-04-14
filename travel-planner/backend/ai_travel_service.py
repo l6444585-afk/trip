@@ -271,34 +271,55 @@ class AITravelService:
                 "stream": False,
                 "context": session.context
             }
-        
-        try:
-            if self.provider == "doubao":
-                response = await self._call_doubao_api(messages)
-            elif self.provider == "zhipu":
-                response = await self._call_zhipu_api(messages)
-            else:
-                response = await self._call_siliconflow_api(messages)
 
-            content = response.get("content", "")
-            session.add_message("assistant", content)
-            self._update_context(session, message, content)
+        api_response = None
+        for attempt_provider in self._get_fallback_chain():
+            try:
+                if attempt_provider == "doubao":
+                    api_response = await self._call_doubao_api(messages)
+                elif attempt_provider == "zhipu":
+                    api_response = await self._ensure_zhipu_and_call(messages)
+                elif attempt_provider == "siliconflow":
+                    api_response = await self._call_siliconflow_api(messages)
+                logger.info(f"AI provider {attempt_provider} succeeded")
+                break
+            except Exception as e:
+                logger.warning(f"AI provider {attempt_provider} failed: {e}, trying next...")
 
-            return {
-                "content": content,
-                "stream": False,
-                "context": session.context,
-                "usage": response.get("usage")
-            }
-        except Exception as e:
-            logger.error(f"API error: {str(e)}")
-            error_response = f"抱歉，AI服务暂时不可用。请稍后再试。错误信息：{str(e)}"
-            session.add_message("assistant", error_response)
-            return {
-                "content": error_response,
-                "stream": False,
-                "error": str(e)
-            }
+        if api_response is None:
+            content = self._mock_response(message, session)
+            logger.warning("All AI providers failed, using mock response")
+        else:
+            content = api_response.get("content", "")
+
+        session.add_message("assistant", content)
+        self._update_context(session, message, content)
+        return {
+            "content": content,
+            "stream": False,
+            "context": session.context,
+            "usage": api_response.get("usage") if api_response else {}
+        }
+
+    def _get_fallback_chain(self) -> List[str]:
+        """按优先级返回可用的 provider 列表，供自动降级"""
+        chain = []
+        if self.provider == "doubao":
+            chain.append("doubao")
+        if self.glm_api_key and self.glm_api_key != "your_glm_api_key_here":
+            chain.append("zhipu")
+        if self.provider == "zhipu" and "zhipu" not in chain:
+            chain.insert(0, "zhipu")
+        if self.siliconflow_api_key:
+            chain.append("siliconflow")
+        return chain if chain else ["mock"]
+
+    async def _ensure_zhipu_and_call(self, messages: List[Dict]) -> Dict:
+        """确保 zhipu_client 初始化后再调用，支持作为 fallback 使用"""
+        if not hasattr(self, "zhipu_client") or self.zhipu_client is None:
+            from zhipuai import ZhipuAI
+            self.zhipu_client = ZhipuAI(api_key=self.glm_api_key)
+        return await self._call_zhipu_api(messages)
     
     async def _call_doubao_api(self, messages: List[Dict]) -> Dict:
         headers = {
@@ -510,30 +531,35 @@ class AITravelService:
         
         if self.provider == "mock":
             return self._mock_itinerary(departure, destination, days, budget)
-        
-        try:
-            if self.provider == "doubao":
-                response = await self._call_doubao_api(messages)
-            elif self.provider == "zhipu":
-                response = await self._call_zhipu_api(messages)
-            else:
-                response = await self._call_siliconflow_api(messages)
 
-            content = response.get("content", "")
-            session.add_message("assistant", content)
-            
+        api_response = None
+        for attempt_provider in self._get_fallback_chain():
             try:
-                if "```json" in content:
-                    content = content.split("```json")[1].split("```")[0]
-                elif "```" in content:
-                    content = content.split("```")[1].split("```")[0]
-                return json.loads(content.strip())
-            except json.JSONDecodeError:
-                return {"raw_content": content, "error": "JSON解析失败"}
-                
-        except Exception as e:
-            logger.error(f"Generate itinerary error: {str(e)}")
-            return {"error": str(e)}
+                if attempt_provider == "doubao":
+                    api_response = await self._call_doubao_api(messages)
+                elif attempt_provider == "zhipu":
+                    api_response = await self._ensure_zhipu_and_call(messages)
+                elif attempt_provider == "siliconflow":
+                    api_response = await self._call_siliconflow_api(messages)
+                break
+            except Exception as e:
+                logger.warning(f"generate_itinerary: {attempt_provider} failed: {e}")
+
+        if api_response is None:
+            logger.warning("All providers failed for generate_itinerary, using mock")
+            return self._mock_itinerary(departure, destination, days, budget)
+
+        content = api_response.get("content", "")
+        session.add_message("assistant", content)
+
+        try:
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0]
+            elif "```" in content:
+                content = content.split("```")[1].split("```")[0]
+            return json.loads(content.strip())
+        except json.JSONDecodeError:
+            return {"raw_content": content, "error": "JSON解析失败"}
     
     def _mock_itinerary(self, departure: str, destination: str, days: int, budget: float) -> Dict:
         return {

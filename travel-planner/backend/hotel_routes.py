@@ -63,7 +63,28 @@ async def search_hotels(
             city=city,
             page_size=limit
         )
-        
+
+        # 高德返回空结果时（key 受限 / API 异常），降级到 mock 保证答辩可用
+        if not amap_hotels:
+            city_name = city or "杭州"
+            mock_hotels = service.generate_mock_hotels(
+                city=city_name,
+                latitude=latitude,
+                longitude=longitude,
+                count=limit,
+                check_in=check_in,
+                check_out=check_out
+            )
+            return {
+                "success": True,
+                "center": {"latitude": latitude, "longitude": longitude},
+                "radius_m": radius,
+                "count": len(mock_hotels),
+                "hotels": [h.to_dict() for h in mock_hotels],
+                "data_source": "mock_fallback",
+                "message": "高德地图暂无数据，已切换备用数据"
+            }
+
         for hotel in amap_hotels:
             hotel.booking_links = service.generate_booking_links(
                 hotel_name=hotel.name,
@@ -75,9 +96,9 @@ async def search_hotels(
             )
             if hotel.booking_links:
                 hotel.booking_url = hotel.booking_links.get("ctrip", "")
-        
+
         amap_hotels.sort(key=lambda h: h.distance_km or float("inf"))
-        
+
         return {
             "success": True,
             "center": {"latitude": latitude, "longitude": longitude},
@@ -125,7 +146,20 @@ async def get_hotels_near_attraction(
             radius_km=radius_km,
             limit=limit
         )
-        
+
+        # AMap 返回空时降级 mock
+        data_source = "amap"
+        if not hotels:
+            hotels = service.generate_mock_hotels(
+                city=attraction.city or "杭州",
+                latitude=attraction.latitude,
+                longitude=attraction.longitude,
+                count=limit,
+                check_in=check_in,
+                check_out=check_out
+            )
+            data_source = "mock_fallback"
+
         return {
             "success": True,
             "attraction": {
@@ -136,7 +170,8 @@ async def get_hotels_near_attraction(
             },
             "radius_km": radius_km,
             "count": len(hotels),
-            "hotels": [h.to_dict() for h in hotels]
+            "hotels": [h.to_dict() for h in hotels],
+            "data_source": data_source
         }
         
     except HTTPException:
@@ -354,7 +389,30 @@ async def get_hotels_by_city(
             city=city,
             page_size=limit
         )
-        
+
+        # 高德返回空结果时降级到 mock
+        if not hotels:
+            mock_hotels = service.generate_mock_hotels(
+                city=city,
+                latitude=center_lat,
+                longitude=center_lon,
+                count=limit,
+                check_in=check_in,
+                check_out=check_out
+            )
+            if price_min:
+                mock_hotels = [h for h in mock_hotels if h.price_min and h.price_min >= price_min]
+            if price_max:
+                mock_hotels = [h for h in mock_hotels if not h.price_min or h.price_min <= price_max]
+            return {
+                "success": True,
+                "city": city,
+                "count": len(mock_hotels[:limit]),
+                "hotels": [h.to_dict() for h in mock_hotels[:limit]],
+                "data_source": "mock_fallback",
+                "message": "高德地图暂无数据，已切换备用数据"
+            }
+
         for hotel in hotels:
             hotel.booking_links = service.generate_booking_links(
                 hotel_name=hotel.name,
@@ -366,14 +424,14 @@ async def get_hotels_by_city(
             )
             if hotel.booking_links:
                 hotel.booking_url = hotel.booking_links.get("ctrip", "")
-        
+
         if price_min:
             hotels = [h for h in hotels if h.price_min and h.price_min >= price_min]
         if price_max:
             hotels = [h for h in hotels if not h.price_min or h.price_min <= price_max]
-        
+
         hotels.sort(key=lambda h: h.rating or 0, reverse=True)
-        
+
         return {
             "success": True,
             "city": city,

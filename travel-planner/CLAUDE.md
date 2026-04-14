@@ -78,6 +78,13 @@ Windows 首次部署清单：
 5. 手动模式：先启动后端 `python main.py`（端口8000），再 `npm start`（端口3000），proxy 自动指向 8000
 6. Docker 模式：`docker compose up -d --build`，前端 3890，后端 8890
 
+### DESIGN.md 设计规范（永久生效）
+- 项目根目录如果存在 `DESIGN.md`，所有 UI 相关改动 MUST 先读取并遵循该文件的设计规范
+- 包括但不限于：颜色、字体、组件样式、间距、圆角、阴影、响应式断点
+- 写 CSS/JSX 前 MUST 先确认 DESIGN.md 中对应组件的规范，不要凭感觉写样式
+- 设计文件来源：`/Users/tkag/Projects/awesome-design-md/design-md/`（58 个网站风格可选）
+- 切换风格时只需替换 DESIGN.md 文件，代码自动适配新风格
+
 ## 关键架构决策
 
 ### AI 生成行程的回退机制
@@ -116,9 +123,11 @@ Windows 首次部署清单：
 - 图表描述文件：`论文图表/*.md`，可直接上传到工具的"文档转图表"功能
 - 也可上传参考论文截图，用"复制流程图"复刻风格再改内容
 - **风格铁律：纯黑白，零颜色，标准UML/Chen记法，学术论文风格**
-- 导出 PNG（300dpi）插入 Word
+- **布局铁律：所有元素必须在系统边界框内，不能突出；整齐对齐，仿仰恩大学论文风格**
+- 导出 PNG 插入 Word
 
 ### Git 推送规则（永久生效）
+- 完成修改并验证后 MUST 自动推送，NEVER 等用户催
 - 每次推送 MUST 同时推 `main` 和 `develop` 两个分支
 - 推送前检查两分支是否同步，有差异先合并
 - 命令：`git push origin main && git push origin develop`

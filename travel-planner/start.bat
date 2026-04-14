@@ -29,17 +29,31 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-docker-compose --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo 错误: 未检测到 Docker Compose，请先安装
+REM 优先用 docker compose v2，不行再用 docker-compose v1
+set COMPOSE_CMD=
+docker compose version >nul 2>&1
+if %errorlevel% equ 0 (
+    set COMPOSE_CMD=docker compose
+) else (
+    docker-compose --version >nul 2>&1
+    if %errorlevel% equ 0 (
+        set COMPOSE_CMD=docker-compose
+    )
+)
+
+if "%COMPOSE_CMD%"=="" (
+    echo 错误: 未检测到 Docker Compose，请升级 Docker Desktop
     pause
     exit /b 1
 )
 
+echo 使用: %COMPOSE_CMD%
+echo.
+
 echo [3/3] 启动服务...
 echo.
 echo 正在构建并启动容器...
-docker-compose up -d --build
+%COMPOSE_CMD% up -d --build
 
 if %errorlevel% neq 0 (
     echo.
@@ -53,12 +67,12 @@ echo ========================================
 echo   服务启动成功！
 echo ========================================
 echo.
-echo 前端地址: http://localhost:3000
-echo 后端地址: http://localhost:8000
-echo API 文档: http://localhost:8000/docs
+echo 前端地址: http://localhost:3890
+echo 后端地址: http://localhost:8890
+echo API 文档: http://localhost:8890/docs
 echo.
 echo 默认账号: admin / 123456
 echo.
 echo 按任意键查看日志...
 pause >nul
-docker-compose logs -f
+%COMPOSE_CMD% logs -f

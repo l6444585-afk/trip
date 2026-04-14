@@ -131,8 +131,8 @@ const HotelSearchPage = () => {
         
         setHotels(hotelList);
         
-        if (response.data.data_source === 'mock') {
-          message.info('使用模拟数据展示，配置高德地图API Key后可获取真实数据');
+        if (response.data.data_source === 'mock' || response.data.data_source === 'mock_fallback') {
+          message.info(response.data.message || '使用模拟数据展示');
         }
       }
     } catch (error) {
