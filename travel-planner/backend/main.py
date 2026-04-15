@@ -166,10 +166,16 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     def is_rate_limited(self, client_ip: str) -> tuple[bool, str]:
         now = time.time()
         with self.lock:
+            # 清理过期时间戳
             self.requests[client_ip] = [
                 t for t in self.requests[client_ip] if now - t < 3600
             ]
-            hour_requests = len([t for t in self.requests[client_ip] if now - t < 3600])
+            # 清理不活跃 IP，防止内存泄漏（排除当前请求 IP）
+            stale_ips = [ip for ip, ts in self.requests.items() if not ts and ip != client_ip]
+            for ip in stale_ips:
+                del self.requests[ip]
+
+            hour_requests = len(self.requests[client_ip])
             minute_requests = len([t for t in self.requests[client_ip] if now - t < 60])
             
             if hour_requests >= self.requests_per_hour:
@@ -204,10 +210,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
         response.headers["X-XSS-Protection"] = "1; mode=block"
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-        response.headers["Content-Security-Policy"] = "default-src 'self'"
         return response
 
 app = FastAPI(
@@ -324,7 +328,9 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(status_code=400, detail="邮箱已被注册")
     
-    new_user = User(**user.model_dump())
+    user_data = user.model_dump()
+    user_data["password"] = get_password_hash(user_data["password"])
+    new_user = User(**user_data)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

@@ -12,6 +12,8 @@ services:
     environment:
       - REDIS_ENABLED=true
       - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=sqlite:////app/db/travel_planner.db
+      - ENHANCED_DATABASE_URL=sqlite:////app/db/travel_planner_enhanced.db
     volumes:
       - backend-data:/app/db
     networks:
