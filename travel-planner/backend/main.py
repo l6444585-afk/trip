@@ -57,6 +57,43 @@ from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
+def init_cities():
+    """初始化江浙沪17城市数据（仅在City表为空时执行）"""
+    from database import SessionLocal
+    db = SessionLocal()
+    try:
+        if db.query(City).count() > 0:
+            return
+        cities_data = [
+            {"name": "上海", "province": "上海", "latitude": 31.2304, "longitude": 121.4737, "description": "国际化大都市，东方明珠", "best_season": "春秋季（3-5月、9-11月）", "avg_daily_cost": 800, "highlights": "外滩,东方明珠,迪士尼,豫园,南京路"},
+            {"name": "杭州", "province": "浙江", "latitude": 30.2741, "longitude": 120.1551, "description": "人间天堂，西湖名城", "best_season": "春秋季（3-5月、9-11月）", "avg_daily_cost": 600, "highlights": "西湖,灵隐寺,千岛湖,宋城,西溪湿地"},
+            {"name": "南京", "province": "江苏", "latitude": 32.0603, "longitude": 118.7969, "description": "六朝古都，文化名城", "best_season": "春秋季（3-5月、9-11月）", "avg_daily_cost": 500, "highlights": "中山陵,夫子庙,玄武湖,明孝陵,总统府"},
+            {"name": "苏州", "province": "江苏", "latitude": 31.2990, "longitude": 120.5853, "description": "园林之城，水乡古镇", "best_season": "春季（3-5月）", "avg_daily_cost": 550, "highlights": "拙政园,虎丘,周庄,平江路,金鸡湖"},
+            {"name": "无锡", "province": "江苏", "latitude": 31.4912, "longitude": 120.3119, "description": "太湖明珠，鱼米之乡", "best_season": "春季（3-4月）", "avg_daily_cost": 450, "highlights": "鼋头渚,灵山大佛,三国城,蠡园,惠山古镇"},
+            {"name": "宁波", "province": "浙江", "latitude": 29.8683, "longitude": 121.5440, "description": "海丝名城，港口重镇", "best_season": "秋季（9-11月）", "avg_daily_cost": 500, "highlights": "天一阁,东钱湖,溪口,老外滩,象山影视城"},
+            {"name": "嘉兴", "province": "浙江", "latitude": 30.7467, "longitude": 120.7550, "description": "红船精神发源地，水乡古镇", "best_season": "春季（3-5月）", "avg_daily_cost": 400, "highlights": "乌镇,西塘,南湖,月河古街,海宁潮"},
+            {"name": "扬州", "province": "江苏", "latitude": 32.3936, "longitude": 119.4130, "description": "烟花三月，运河名城", "best_season": "春季（3-4月）", "avg_daily_cost": 400, "highlights": "瘦西湖,个园,何园,东关街,大明寺"},
+            {"name": "绍兴", "province": "浙江", "latitude": 30.0286, "longitude": 120.5753, "description": "鲁迅故里，黄酒之乡", "best_season": "春秋季（3-5月、9-11月）", "avg_daily_cost": 350, "highlights": "鲁迅故里,兰亭,沈园,安昌古镇,会稽山"},
+            {"name": "常州", "province": "江苏", "latitude": 31.8112, "longitude": 119.9741, "description": "龙城常州，主题乐园之城", "best_season": "春秋季（4-5月、9-10月）", "avg_daily_cost": 450, "highlights": "中华恐龙园,天目湖,春秋淹城,南山竹海,青果巷"},
+            {"name": "湖州", "province": "浙江", "latitude": 30.8927, "longitude": 120.0868, "description": "太湖南岸，绿水青山", "best_season": "春夏季（4-8月）", "avg_daily_cost": 400, "highlights": "南浔古镇,莫干山,太湖,安吉竹海,藏龙百瀑"},
+            {"name": "温州", "province": "浙江", "latitude": 28.0015, "longitude": 120.6722, "description": "山水温州，商贸名城", "best_season": "秋季（9-11月）", "avg_daily_cost": 450, "highlights": "雁荡山,楠溪江,江心屿,洞头,百丈漈"},
+            {"name": "镇江", "province": "江苏", "latitude": 32.2044, "longitude": 119.4246, "description": "城市山林，醋都镇江", "best_season": "春秋季（3-5月、9-11月）", "avg_daily_cost": 350, "highlights": "金山寺,焦山,北固山,西津渡,茅山"},
+            {"name": "舟山", "province": "浙江", "latitude": 29.9853, "longitude": 122.1074, "description": "千岛之城，海天佛国", "best_season": "夏秋季（6-10月）", "avg_daily_cost": 500, "highlights": "普陀山,朱家尖,东极岛,桃花岛,嵊泗列岛"},
+            {"name": "南通", "province": "江苏", "latitude": 32.0146, "longitude": 120.8647, "description": "江海门户，近代第一城", "best_season": "春秋季（4-5月、9-10月）", "avg_daily_cost": 350, "highlights": "濠河,狼山,南通博物苑,如皋水绘园,启东圆陀角"},
+            {"name": "台州", "province": "浙江", "latitude": 28.6561, "longitude": 121.4205, "description": "山海台州，和合圣地", "best_season": "夏秋季（7-10月）", "avg_daily_cost": 400, "highlights": "天台山,神仙居,大陈岛,国清寺,括苍山"},
+            {"name": "金华", "province": "浙江", "latitude": 29.0789, "longitude": 119.6474, "description": "八婺金华，火腿之乡", "best_season": "春秋季（3-5月、9-11月）", "avg_daily_cost": 350, "highlights": "横店影视城,双龙洞,诸葛八卦村,武义温泉,磐安花溪"},
+        ]
+        for city_data in cities_data:
+            city = City(**city_data)
+            db.add(city)
+        db.commit()
+        print(f"🏙️ 初始化城市数据：{len(cities_data)} 个城市")
+    except Exception as e:
+        db.rollback()
+        print(f"⚠️ 城市数据初始化失败: {e}")
+    finally:
+        db.close()
+
 def create_demo_user():
     from database import SessionLocal
     from auth_utils import get_password_hash
@@ -91,6 +128,7 @@ async def lifespan(app: FastAPI):
     init_enhanced_db()
     init_admin_db()
     create_demo_user()
+    init_cities()
     from database import SessionLocal
     from admin_models import init_admin_data
     from data.scenic_data import init_scenic_data
